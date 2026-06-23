@@ -28,7 +28,10 @@ const restaurants = [
     price: 129,
     service: "Almoço e jantar",
     description: "Conchiglione recheado com gorgonzola e servido com cubos de mignon. Sobremesa: brownie de chocolate meio amargo com sorvete de creme e calda de chocolate.",
-    address: "Rua Teixeira Coelho, 255 — Batel · Rua Itupava, 1094 — Alto da XV",
+    addresses: [
+      { label: "Batel", address: "Rua Teixeira Coelho, 255" },
+      { label: "Alto da XV", address: "Rua Itupava, 1094" }
+    ],
     instagram: "@cantinadodelio",
     images: [
       "assets/restaurants/optimized/cantina-do-delio-1.jpg",
@@ -355,6 +358,13 @@ function placeholderMarkup() {
   return `<div class="card-placeholder"><div><span aria-hidden="true">❄</span><small>Foto em atualização</small></div></div>`;
 }
 
+function addressEntries(restaurant) {
+  if (Array.isArray(restaurant.addresses) && restaurant.addresses.length) {
+    return restaurant.addresses;
+  }
+  return restaurant.address ? [{ label: "Endereço", address: restaurant.address }] : [];
+}
+
 function cardMarkup(restaurant) {
   const image = restaurant.images[0]
     ? `<img src="${escapeHtml(restaurant.images[0])}" alt="${escapeHtml(restaurant.dish)} — ${escapeHtml(restaurant.name)}" loading="lazy" decoding="async">`
@@ -362,8 +372,11 @@ function cardMarkup(restaurant) {
   const photoCount = restaurant.images.length > 1
     ? `<span class="photo-badge">${restaurant.images.length} fotos</span>`
     : "";
-  const location = restaurant.address
-    ? escapeHtml(restaurant.address)
+  const addresses = addressEntries(restaurant);
+  const location = addresses.length > 1
+    ? `${addresses.length} unidades · ${addresses.map((unit) => escapeHtml(unit.label)).join(" e ")}`
+    : addresses.length === 1
+      ? escapeHtml(addresses[0].address)
     : `<span class="missing">Endereço a confirmar</span>`;
   const service = restaurant.service
     ? escapeHtml(restaurant.service)
@@ -399,7 +412,10 @@ function getFilteredRestaurants() {
     const matchesService = selectedService === "all"
       || (selectedService === "lunch" && normalizedService.includes("almoco"))
       || (selectedService === "dinner" && normalizedService.includes("jantar"));
-    const haystack = normalizeText(`${restaurant.name} ${restaurant.dish} ${restaurant.description} ${restaurant.address || ""}`);
+    const addressText = addressEntries(restaurant)
+      .map((unit) => `${unit.label} ${unit.address}`)
+      .join(" ");
+    const haystack = normalizeText(`${restaurant.name} ${restaurant.dish} ${restaurant.description} ${addressText}`);
     return matchesPrice && matchesService && (!query || haystack.includes(query));
   });
 }
@@ -450,15 +466,21 @@ function dialogMarkup(restaurant) {
           </button>`).join("")}
       </div>`
     : "";
-  const address = restaurant.address
-    ? escapeHtml(restaurant.address)
-    : `<span class="missing">Endereço não informado — a confirmar</span>`;
+  const addresses = addressEntries(restaurant);
+  const addressRows = addresses.length
+    ? addresses.map((unit) => `
+        <div>
+          <dt>${addresses.length > 1 ? `Unidade ${escapeHtml(unit.label)}` : "Endereço"}</dt>
+          <dd>${escapeHtml(unit.address)}</dd>
+        </div>`).join("")
+    : `<div><dt>Endereço</dt><dd><span class="missing">Endereço não informado — a confirmar</span></dd></div>`;
   const service = restaurant.service
     ? escapeHtml(restaurant.service)
     : `<span class="missing">Horário não informado — a confirmar</span>`;
-  const directions = restaurant.address
-    ? `<a href="${mapUrl(restaurant.address)}" target="_blank" rel="noopener">Como chegar <span aria-hidden="true">↗</span></a>`
-    : "";
+  const directions = addresses.map((unit) => `
+    <a class="dialog-direction" href="${mapUrl(unit.address)}" target="_blank" rel="noopener">
+      ${addresses.length > 1 ? `Como chegar — ${escapeHtml(unit.label)}` : "Como chegar"} <span aria-hidden="true">↗</span>
+    </a>`).join("");
   const social = restaurant.instagram
     ? `<a href="${instagramUrl(restaurant.instagram)}" target="_blank" rel="noopener">Ver Instagram <span aria-hidden="true">↗</span></a>`
     : "";
@@ -475,7 +497,7 @@ function dialogMarkup(restaurant) {
         <span class="dialog-price">R$ ${restaurant.price}</span>
         <p class="dialog-description">${escapeHtml(restaurant.description)}</p>
         <dl class="dialog-meta">
-          <div><dt>Endereço</dt><dd>${address}</dd></div>
+          ${addressRows}
           <div><dt>Serviço</dt><dd>${service}</dd></div>
           <div><dt>Período</dt><dd>1º a 31 de julho de 2026</dd></div>
         </dl>
