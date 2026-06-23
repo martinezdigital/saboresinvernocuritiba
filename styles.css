@@ -1,5 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,700;1,800&display=swap");
-
 :root {
   --blue: #076cb5;
   --blue-bright: #0785d4;
@@ -12,7 +10,7 @@
   --muted: #65708b;
   --line: rgba(23, 32, 68, 0.14);
   --shadow: 0 22px 60px rgba(10, 26, 62, 0.12);
-  --serif: "Playfair Display", Georgia, "Times New Roman", serif;
+  --serif: "Lora", Georgia, "Times New Roman", serif;
   --sans: "DM Sans", Arial, Helvetica, sans-serif;
   --shell: min(1180px, calc(100% - 40px));
 }
@@ -33,6 +31,7 @@ body {
   color: var(--ink);
   font-family: var(--sans);
   -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
 }
 
 body.dialog-open {
@@ -57,6 +56,7 @@ input {
 button,
 a {
   -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 button {
@@ -324,10 +324,10 @@ button {
   margin: 0;
   font-family: var(--serif);
   font-size: clamp(62px, 7vw, 102px);
-  font-style: italic;
-  font-weight: 800;
-  letter-spacing: -0.065em;
-  line-height: 0.79;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: -0.055em;
+  line-height: 0.88;
 }
 
 .hero h1 span,
@@ -343,7 +343,7 @@ button {
   margin-top: 8px;
   margin-left: 37%;
   color: var(--orange);
-  font-weight: 800;
+  font-weight: 700;
   text-shadow: 0 4px 0 rgba(112, 36, 2, 0.17);
 }
 
@@ -451,8 +451,8 @@ button {
 .hero-facts dt {
   font-family: var(--serif);
   font-size: 29px;
-  font-style: italic;
-  font-weight: 800;
+  font-style: normal;
+  font-weight: 700;
 }
 
 .hero-facts dd {
@@ -536,9 +536,9 @@ button {
   margin: 0;
   font-family: var(--serif);
   font-size: clamp(44px, 5vw, 68px);
-  font-style: italic;
-  letter-spacing: -0.052em;
-  line-height: 1.02;
+  font-style: normal;
+  letter-spacing: -0.035em;
+  line-height: 1.08;
 }
 
 .intro-copy {
@@ -558,7 +558,7 @@ button {
   color: var(--ink);
   font-family: var(--serif);
   font-size: 25px;
-  font-style: italic;
+  font-style: normal;
   font-weight: 700;
   line-height: 1.45;
 }
@@ -635,7 +635,7 @@ button {
   color: var(--orange);
   font-family: var(--serif);
   font-size: 16px;
-  font-style: italic;
+  font-style: normal;
   font-weight: 700;
 }
 
@@ -643,7 +643,8 @@ button {
   margin: 0 0 14px;
   font-family: var(--serif);
   font-size: 24px;
-  font-style: italic;
+  font-style: normal;
+  font-weight: 700;
 }
 
 .steps p {
@@ -701,7 +702,7 @@ button {
   color: var(--orange);
   font-family: var(--serif);
   font-size: 16px;
-  font-style: italic;
+  font-style: normal;
   font-weight: 700;
 }
 
@@ -709,7 +710,8 @@ button {
   margin: 0 0 13px;
   font-family: var(--serif);
   font-size: 25px;
-  font-style: italic;
+  font-style: normal;
+  font-weight: 700;
   letter-spacing: -0.025em;
 }
 
@@ -777,9 +779,9 @@ button {
   margin: 0;
   font-family: var(--serif);
   font-size: clamp(46px, 5vw, 68px);
-  font-style: italic;
-  letter-spacing: -0.052em;
-  line-height: 1.02;
+  font-style: normal;
+  letter-spacing: -0.035em;
+  line-height: 1.08;
 }
 
 .prize-copy > p:not(.eyebrow) {
@@ -866,7 +868,7 @@ button {
 .institutional-message strong {
   font-family: var(--serif);
   font-size: 20px;
-  font-style: italic;
+  font-style: normal;
   line-height: 1.3;
 }
 
@@ -1094,19 +1096,25 @@ button {
   border-radius: 18px;
   background: var(--paper);
   box-shadow: 0 8px 28px rgba(17, 35, 72, 0.04);
-  transition: transform 220ms ease, box-shadow 220ms ease;
-}
-
-.restaurant-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow);
 }
 
 .card-media {
   position: relative;
+  display: block;
+  width: 100%;
   overflow: hidden;
+  padding: 0;
+  border: 0;
   aspect-ratio: 1.25;
   background: var(--navy);
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+
+.card-media:focus-visible {
+  outline: 3px solid var(--orange);
+  outline-offset: -3px;
 }
 
 .card-media::after {
@@ -1121,11 +1129,6 @@ button {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 500ms cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-
-.restaurant-card:hover .card-media img {
-  transform: scale(1.035);
 }
 
 .card-placeholder {
@@ -1191,7 +1194,6 @@ button {
   font-weight: 800;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  backdrop-filter: blur(8px);
 }
 
 .price-badge {
@@ -1201,7 +1203,7 @@ button {
 
 .photo-badge {
   margin-left: auto;
-  background: rgba(15, 25, 56, 0.74);
+  background: rgba(15, 25, 56, 0.9);
   color: #fff;
 }
 
@@ -1222,10 +1224,11 @@ button {
   min-height: 58px;
   margin: 0;
   font-family: var(--serif);
-  font-size: 24px;
-  font-style: italic;
-  letter-spacing: -0.035em;
-  line-height: 1.15;
+  font-size: 23px;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.23;
 }
 
 .card-service {
@@ -1293,12 +1296,14 @@ button {
 .card-action {
   display: flex;
   width: 100%;
+  min-height: 50px;
   align-items: center;
   justify-content: space-between;
   margin-top: 17px;
-  padding: 0;
-  border: 0;
-  background: transparent;
+  padding: 9px 10px 9px 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: rgba(7, 108, 181, 0.035);
   color: var(--ink);
   cursor: pointer;
   font-size: 12px;
@@ -1338,7 +1343,7 @@ button {
   margin: 16px 0 7px;
   font-family: var(--serif);
   font-size: 30px;
-  font-style: italic;
+  font-style: normal;
 }
 
 .empty-state p {
@@ -1521,8 +1526,8 @@ button {
   margin: 0;
   font-family: var(--serif);
   font-size: clamp(38px, 4.5vw, 56px);
-  font-style: italic;
-  letter-spacing: -0.045em;
+  font-style: normal;
+  letter-spacing: -0.035em;
 }
 
 .footer-partners-head > p {
@@ -1755,7 +1760,9 @@ button {
   grid-auto-flow: column;
   gap: 8px;
   overflow-x: auto;
+  scroll-snap-type: x proximity;
   scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
 }
 
 .gallery-thumb {
@@ -1767,6 +1774,7 @@ button {
   border-radius: 8px;
   background: var(--navy);
   cursor: pointer;
+  scroll-snap-align: start;
 }
 
 .gallery-thumb img {
@@ -1796,9 +1804,10 @@ button {
   margin: 0;
   font-family: var(--serif);
   font-size: clamp(37px, 4vw, 55px);
-  font-style: italic;
-  letter-spacing: -0.05em;
-  line-height: 1.04;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.12;
 }
 
 .dialog-price {
@@ -1943,6 +1952,31 @@ button {
 @media (max-width: 780px) {
   :root {
     --shell: min(100% - 30px, 640px);
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+
+  input,
+  select,
+  .search-box input,
+  .service-filter select {
+    font-size: 16px;
+  }
+
+  .site-header.is-scrolled,
+  .site-header.menu-open {
+    backdrop-filter: none;
+  }
+
+  .hero::before,
+  .hero-pattern,
+  .prize::before,
+  .institutional-box::before,
+  .vote-card::before,
+  .vote-card::after {
+    display: none;
   }
 
   .section {
@@ -2102,6 +2136,16 @@ button {
     grid-template-columns: 1fr;
   }
 
+  .restaurant-dialog::backdrop,
+  .dialog-close {
+    backdrop-filter: none;
+  }
+
+  .dialog-shell {
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
   .dialog-main-image {
     height: min(62vw, 480px);
   }
@@ -2149,7 +2193,7 @@ button {
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 16px;
     background: var(--orange);
-    box-shadow: 0 17px 42px rgba(8, 22, 53, 0.28);
+    box-shadow: 0 10px 28px rgba(8, 22, 53, 0.22);
     color: #fff;
   }
 
@@ -2207,7 +2251,7 @@ button {
 
   .hero h1 {
     font-size: clamp(52px, 16vw, 72px);
-    line-height: 0.84;
+    line-height: 0.92;
   }
 
   .hero h1 em {
@@ -2303,6 +2347,15 @@ button {
     border-radius: 15px;
   }
 
+  .card-body {
+    padding: 20px;
+  }
+
+  .card-body h3,
+  .card-description {
+    min-height: 0;
+  }
+
   .filter-chips {
     width: 100%;
   }
@@ -2340,14 +2393,19 @@ button {
   }
 
   .restaurant-dialog {
+    height: 100dvh;
     width: 100%;
-    max-height: 100vh;
+    max-height: 100dvh;
     margin: 0;
     border-radius: 0;
   }
 
   .dialog-shell {
-    max-height: 100vh;
+    max-height: 100dvh;
+  }
+
+  .dialog-close {
+    top: max(12px, env(safe-area-inset-top));
   }
 
   .dialog-gallery {
@@ -2364,11 +2422,44 @@ button {
   }
 
   .dialog-info {
-    padding: 35px 22px 42px;
+    padding: 35px 22px calc(42px + env(safe-area-inset-bottom));
   }
 
   .dialog-meta div {
     grid-template-columns: 70px 1fr;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .restaurant-card {
+    transition: transform 220ms ease, box-shadow 220ms ease;
+  }
+
+  .restaurant-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow);
+  }
+
+  .card-media img {
+    transition: transform 500ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  .restaurant-card:hover .card-media img {
+    transform: scale(1.035);
+  }
+}
+
+@media (hover: none) {
+  .button:hover,
+  .button:focus-visible {
+    transform: none;
+  }
+
+  .card-action:hover span,
+  .card-action:focus-visible span {
+    transform: none;
+    background: transparent;
+    color: var(--orange);
   }
 }
 
