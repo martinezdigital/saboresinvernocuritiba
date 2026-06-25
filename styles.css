@@ -840,7 +840,8 @@ button {
   position: relative;
   z-index: 1;
   width: min(100%, 340px);
-  border-radius: 17px;
+  height: auto;
+  border-radius: 0;
   box-shadow: 0 14px 35px rgba(11, 64, 129, 0.18);
 }
 
