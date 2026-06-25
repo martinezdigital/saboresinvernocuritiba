@@ -168,8 +168,11 @@ const restaurants = [
     address: "Rua Buenos Aires, 50 — Batel",
     instagram: "@hrccuritiba",
     imagePosition: "center bottom",
+    modalImagePosition: "center bottom",
+    modalImageFit: "cover",
+    modalImageHeight: "clamp(405px, 52dvh, 500px)",
     images: [
-      "assets/restaurants/optimized/hard-rock-cafe-1.jpg",
+      "assets/restaurants/optimized/hard-rock-cafe-1-crop.jpg",
       "assets/restaurants/optimized/hard-rock-cafe-2.jpg"
     ]
   },
@@ -483,8 +486,19 @@ function mapUrl(address) {
 }
 
 function dialogMarkup(restaurant) {
-  const dialogImageStyle = restaurant.modalImagePosition || restaurant.imagePosition
-    ? ` style="--dialog-image-position: ${escapeHtml(restaurant.modalImagePosition || restaurant.imagePosition)}"`
+  const dialogImageStyles = [
+    restaurant.modalImagePosition || restaurant.imagePosition
+      ? `--dialog-image-position: ${escapeHtml(restaurant.modalImagePosition || restaurant.imagePosition)}`
+      : "",
+    restaurant.modalImageFit
+      ? `--dialog-image-fit: ${escapeHtml(restaurant.modalImageFit)}`
+      : "",
+    restaurant.modalImageHeight
+      ? `--dialog-image-height: ${escapeHtml(restaurant.modalImageHeight)}`
+      : ""
+  ].filter(Boolean);
+  const dialogImageStyle = dialogImageStyles.length
+    ? ` style="${dialogImageStyles.join("; ")}"`
     : "";
   const primaryImage = restaurant.images[0]
     ? `<img id="dialog-main-photo" src="${escapeHtml(restaurant.images[0])}" alt="${escapeHtml(restaurant.dish)} — ${escapeHtml(restaurant.name)}">`
