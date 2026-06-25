@@ -108,13 +108,16 @@ const restaurants = [
   {
     slug: "dom-carmino",
     name: "Dom Carmino Pizzaria",
-    dish: "Jantar Harmonizado",
+    dish: "Pizza, Vinho e Petit Gateau",
     price: 129,
     service: "Jantar",
-    description: "Pizza grande acompanhada de duas taças de vinho.",
+    description: "Pizza grande tradicional acompanhada de duas taças de vinho tinto. Sobremesa: petit gateau.",
     address: "Avenida Cândido Hartmann, 1550",
     instagram: "@domcarminopizzaria",
-    images: ["assets/restaurants/optimized/dom-carmino-1.jpg"]
+    images: [
+      "assets/restaurants/optimized/dom-carmino-2.jpg",
+      "assets/restaurants/optimized/dom-carmino-1.jpg"
+    ]
   },
   {
     slug: "doppo-cucina",
@@ -480,6 +483,9 @@ function mapUrl(address) {
 }
 
 function dialogMarkup(restaurant) {
+  const dialogImageStyle = restaurant.modalImagePosition || restaurant.imagePosition
+    ? ` style="--dialog-image-position: ${escapeHtml(restaurant.modalImagePosition || restaurant.imagePosition)}"`
+    : "";
   const primaryImage = restaurant.images[0]
     ? `<img id="dialog-main-photo" src="${escapeHtml(restaurant.images[0])}" alt="${escapeHtml(restaurant.dish)} — ${escapeHtml(restaurant.name)}">`
     : placeholderMarkup();
@@ -513,7 +519,7 @@ function dialogMarkup(restaurant) {
   return `
     <div class="dialog-grid">
       <div class="dialog-gallery">
-        <div class="dialog-main-image">${primaryImage}</div>
+        <div class="dialog-main-image"${dialogImageStyle}>${primaryImage}</div>
         ${thumbnails}
       </div>
       <div class="dialog-info">
