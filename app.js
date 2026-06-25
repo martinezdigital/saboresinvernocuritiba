@@ -164,6 +164,7 @@ const restaurants = [
     description: "Salmão grelhado com mostarda agridoce, purê de batatas e vegetais. Sobremesa: meia New York cheesecake com calda de morango.",
     address: "Rua Buenos Aires, 50 — Batel",
     instagram: "@hrccuritiba",
+    imagePosition: "center bottom",
     images: [
       "assets/restaurants/optimized/hard-rock-cafe-1.jpg",
       "assets/restaurants/optimized/hard-rock-cafe-2.jpg"
@@ -407,7 +408,7 @@ function cardMarkup(restaurant) {
     : `<span class="missing">Horário a confirmar</span>`;
 
   return `
-    <article class="restaurant-card">
+    <article class="restaurant-card"${restaurant.imagePosition ? ` style="--card-image-position: ${escapeHtml(restaurant.imagePosition)}"` : ""}>
       <button class="card-media" type="button" data-open="${restaurant.slug}" aria-label="Abrir menu e fotos de ${escapeHtml(restaurant.name)}">
         ${image}
         <div class="card-badges">
