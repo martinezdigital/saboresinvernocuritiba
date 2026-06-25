@@ -49,9 +49,7 @@ const restaurants = [
     instagram: "@cantinabaviera",
     images: [
       "assets/restaurants/optimized/cantina-baviera-1.jpg",
-      "assets/restaurants/optimized/cantina-baviera-2.jpg",
-      "assets/restaurants/optimized/cantina-baviera-3.jpg",
-      "assets/restaurants/optimized/cantina-baviera-4.jpg"
+      "assets/restaurants/optimized/cantina-baviera-2.jpg"
     ]
   },
   {
@@ -89,8 +87,7 @@ const restaurants = [
     address: "Rua Major Heitor Guimarães, 1130",
     instagram: "@cutelaria.distrito",
     images: [
-      "assets/restaurants/optimized/cutelaria-1.jpg",
-      "assets/restaurants/optimized/cutelaria-2.jpg"
+      "assets/restaurants/optimized/cutelaria-1.jpg"
     ]
   },
   {
@@ -184,9 +181,7 @@ const restaurants = [
     images: [
       "assets/restaurants/optimized/imaginum-sushi-1.jpg",
       "assets/restaurants/optimized/imaginum-sushi-2.jpg",
-      "assets/restaurants/optimized/imaginum-sushi-3.jpg",
-      "assets/restaurants/optimized/imaginum-sushi-4.jpg",
-      "assets/restaurants/optimized/imaginum-sushi-5.jpg"
+      "assets/restaurants/optimized/imaginum-sushi-4.jpg"
     ]
   },
   {
@@ -242,8 +237,7 @@ const restaurants = [
     instagram: "@opera_arte",
     images: [
       "assets/restaurants/optimized/opera-arte-1.jpg",
-      "assets/restaurants/optimized/opera-arte-2.jpg",
-      "assets/restaurants/optimized/opera-arte-3.jpg"
+      "assets/restaurants/optimized/opera-arte-2.jpg"
     ]
   },
   {
@@ -331,9 +325,39 @@ const closeDialogButton = document.querySelector(".dialog-close");
 const header = document.querySelector("[data-header]");
 const menuToggle = document.querySelector(".menu-toggle");
 const mainNav = document.querySelector(".main-nav");
+const heroMainImage = document.querySelector("[data-hero-main-image]");
+const heroCaption = document.querySelector("[data-hero-caption]");
 
 let selectedPrice = "all";
 let selectedService = "all";
+
+const heroSlides = [
+  {
+    src: "assets/restaurants/optimized/dina-pizza-2.jpg",
+    alt: "Pizza de costela serrana com pinhão sobre mesa de madeira",
+    caption: "Pizza de costela serrana com pinhão — sabor de inverno no forno."
+  },
+  {
+    src: "assets/restaurants/optimized/alchemia-1.jpg",
+    alt: "Prato com farofa de broa, pinhão e carne servido em mesa de madeira",
+    caption: "Farofa de broa com pinhão, erva-mate e clima de mesa curitibana."
+  },
+  {
+    src: "assets/restaurants/optimized/carlo-ristorante-1.jpg",
+    alt: "Risoto de linguiça Blumenau com pinhão servido à luz baixa",
+    caption: "Risoto de linguiça Blumenau com pinhão — inverno servido no prato."
+  },
+  {
+    src: "assets/restaurants/optimized/cantina-baviera-1.jpg",
+    alt: "Sopa de cebola gratinada servida em cumbuca",
+    caption: "Sopa gratinada, forno a lenha e aconchego de restaurante tradicional."
+  },
+  {
+    src: "assets/restaurants/optimized/opera-arte-1.jpg",
+    alt: "Capeletti recheado com barreado em caldo de batata-salsa",
+    caption: "Barreado em capeletti e caldo de batata-salsa — Paraná no inverno."
+  }
+];
 
 const escapeHtml = (value = "") => String(value)
   .replaceAll("&", "&amp;")
@@ -519,6 +543,63 @@ function closeDialog() {
   if (dialog.open) dialog.close();
 }
 
+function updateHeroMobileBackground(slide) {
+  document.documentElement.style.setProperty("--hero-mobile-bg", `url("${slide.src}")`);
+}
+
+function applyHeroSlide(slide, instant = false) {
+  if (!heroMainImage || !heroCaption || !slide) return;
+
+  updateHeroMobileBackground(slide);
+  heroMainImage.alt = slide.alt;
+  heroCaption.textContent = slide.caption;
+
+  if (heroMainImage.getAttribute("src") === slide.src) return;
+
+  const updateImage = () => {
+    heroMainImage.addEventListener("load", () => {
+      heroMainImage.classList.remove("is-changing");
+    }, { once: true });
+    heroMainImage.src = slide.src;
+  };
+
+  if (instant) {
+    updateImage();
+    return;
+  }
+
+  heroMainImage.classList.add("is-changing");
+  window.setTimeout(updateImage, 220);
+}
+
+function preloadHeroSlides(activeIndex) {
+  heroSlides.forEach((slide, index) => {
+    if (index === activeIndex) return;
+    const image = new Image();
+    image.src = slide.src;
+  });
+}
+
+function initHeroSlides() {
+  if (!heroMainImage || !heroCaption || heroSlides.length === 0) return;
+
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let activeIndex = Math.floor(Math.random() * heroSlides.length);
+
+  applyHeroSlide(heroSlides[activeIndex], true);
+  window.addEventListener("load", () => {
+    window.setTimeout(() => preloadHeroSlides(activeIndex), 900);
+  }, { once: true });
+
+  if (reducedMotion || heroSlides.length < 2) return;
+
+  window.setInterval(() => {
+    if (document.hidden) return;
+    activeIndex = (activeIndex + 1) % heroSlides.length;
+    applyHeroSlide(heroSlides[activeIndex]);
+  }, 7200);
+}
+
 priceButtons.forEach((button) => {
   button.addEventListener("click", () => {
     selectedPrice = button.dataset.price;
@@ -590,4 +671,5 @@ mainNav.addEventListener("click", (event) => {
   header.classList.remove("menu-open");
 });
 
+initHeroSlides();
 renderRestaurants();

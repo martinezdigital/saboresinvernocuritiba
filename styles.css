@@ -13,6 +13,7 @@
   --serif: "Lora", Georgia, "Times New Roman", serif;
   --sans: "DM Sans", Arial, Helvetica, sans-serif;
   --shell: min(1180px, calc(100% - 40px));
+  --hero-mobile-bg: url("assets/restaurants/optimized/dina-pizza-2.jpg");
 }
 
 * {
@@ -232,32 +233,37 @@ button {
 
 .hero {
   position: relative;
-  min-height: 820px;
+  min-height: 800px;
   overflow: hidden;
   background:
-    radial-gradient(circle at 20% 80%, rgba(0, 151, 222, 0.62), transparent 33%),
-    radial-gradient(circle at 85% 12%, rgba(18, 116, 190, 0.8), transparent 28%),
-    linear-gradient(130deg, #0489d8 0%, #076cb5 43%, #143168 100%);
-  color: #fff;
+    radial-gradient(circle at 84% 16%, rgba(237, 107, 11, 0.34), transparent 30%),
+    radial-gradient(circle at 5% 100%, rgba(149, 76, 33, 0.55), transparent 37%),
+    linear-gradient(128deg, #24120d 0%, #522817 48%, #152c35 100%);
+  color: #fff7ea;
 }
 
 .hero::before {
   position: absolute;
   inset: 0;
   content: "";
-  opacity: 0.16;
+  opacity: 0.24;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.45'/%3E%3C/svg%3E");
+  mix-blend-mode: soft-light;
   pointer-events: none;
 }
 
 .hero-pattern {
   position: absolute;
-  width: 710px;
-  height: 710px;
-  right: -170px;
-  bottom: -260px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  top: 76px;
+  right: -240px;
+  width: min(76vw, 850px);
+  height: min(76vw, 850px);
+  border: 1px solid rgba(255, 247, 234, 0.12);
   border-radius: 50%;
+  background:
+    repeating-radial-gradient(circle, rgba(255, 247, 234, 0.055) 0 1px, transparent 1px 34px),
+    radial-gradient(circle, rgba(255, 247, 234, 0.06), transparent 62%);
+  transform: rotate(-8deg);
 }
 
 .hero-pattern::before,
@@ -275,18 +281,18 @@ button {
 
 .hero-grid {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   display: grid;
-  min-height: 780px;
-  grid-template-columns: minmax(0, 1fr) minmax(420px, 0.9fr);
+  min-height: 775px;
+  grid-template-columns: minmax(0, 0.92fr) minmax(430px, 1fr);
   align-items: center;
-  gap: 58px;
+  gap: 74px;
   padding-top: 95px;
   padding-bottom: 80px;
 }
 
 .hero-copy {
-  max-width: 650px;
+  max-width: 640px;
 }
 
 .kicker,
@@ -302,32 +308,33 @@ button {
 .kicker {
   display: flex;
   align-items: center;
-  color: #fff;
+  color: #ffe4bd;
 }
 
 .kicker span {
   width: 37px;
   height: 1px;
   margin-right: 13px;
-  background: var(--orange);
+  background: #f4b36b;
 }
 
 .edition {
   margin: 0 0 2px 8px;
+  color: rgba(255, 247, 234, 0.78);
   font-size: 13px;
   font-weight: 700;
-  letter-spacing: 0.42em;
+  letter-spacing: 0.34em;
   text-transform: uppercase;
 }
 
 .hero h1 {
   margin: 0;
   font-family: var(--serif);
-  font-size: clamp(62px, 7vw, 102px);
+  font-size: clamp(58px, 6.7vw, 92px);
   font-style: normal;
   font-weight: 700;
-  letter-spacing: -0.055em;
-  line-height: 0.88;
+  letter-spacing: -0.032em;
+  line-height: 0.96;
 }
 
 .hero h1 span,
@@ -336,22 +343,25 @@ button {
 }
 
 .hero h1 span {
-  text-shadow: 0 5px 0 rgba(7, 58, 110, 0.2);
+  text-shadow: 0 10px 24px rgba(18, 7, 3, 0.28);
 }
 
 .hero h1 em {
-  margin-top: 8px;
-  margin-left: 37%;
-  color: var(--orange);
+  display: inline-block;
+  margin-top: 10px;
+  margin-left: 0;
+  color: #f4b36b;
+  font-size: 0.82em;
   font-weight: 700;
-  text-shadow: 0 4px 0 rgba(112, 36, 2, 0.17);
+  text-shadow: 0 8px 20px rgba(18, 7, 3, 0.22);
 }
 
 .hero-lead {
-  max-width: 520px;
-  margin: 32px 0 0;
-  font-size: clamp(18px, 2vw, 23px);
-  line-height: 1.45;
+  max-width: 575px;
+  margin: 30px 0 0;
+  color: rgba(255, 247, 234, 0.86);
+  font-size: clamp(17px, 1.65vw, 21px);
+  line-height: 1.58;
 }
 
 .hero-actions {
@@ -416,28 +426,43 @@ button {
   opacity: 0.9;
 }
 
+.hero .button.is-awaiting-link {
+  border: 1px solid rgba(255, 247, 234, 0.16);
+  background: rgba(255, 247, 234, 0.13);
+  box-shadow: 0 18px 34px rgba(18, 7, 3, 0.18);
+  color: #fff8ec;
+  opacity: 1;
+}
+
 .text-link {
   padding: 10px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.45);
+  border-bottom: 1px solid rgba(255, 228, 189, 0.55);
   font-size: 13px;
   font-weight: 600;
 }
 
 .text-link span {
   margin-left: 8px;
-  color: var(--orange);
+  color: #f4b36b;
 }
 
 .hero-facts {
   display: flex;
+  width: fit-content;
   gap: 0;
-  margin: 49px 0 0;
+  margin: 40px 0 0;
+  padding: 8px 10px;
+  border: 1px solid rgba(255, 247, 234, 0.14);
+  border-radius: 24px;
+  background: rgba(255, 247, 234, 0.075);
+  box-shadow: 0 22px 45px rgba(16, 7, 3, 0.16);
+  backdrop-filter: blur(12px);
 }
 
 .hero-facts div {
   display: grid;
-  padding: 0 28px;
-  border-left: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 10px 22px;
+  border-left: 1px solid rgba(255, 247, 234, 0.17);
   grid-template-columns: auto auto;
   align-items: baseline;
   gap: 7px;
@@ -450,13 +475,15 @@ button {
 
 .hero-facts dt {
   font-family: var(--serif);
-  font-size: 29px;
+  color: #f4b36b;
+  font-size: 27px;
   font-style: normal;
   font-weight: 700;
 }
 
 .hero-facts dd {
   margin: 0;
+  color: rgba(255, 247, 234, 0.8);
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -466,52 +493,112 @@ button {
 
 .hero-art {
   position: relative;
-  display: grid;
-  min-height: 570px;
-  place-items: center;
+  min-height: 610px;
 }
 
-.hero-art > img {
-  position: relative;
-  z-index: 2;
-  width: min(100%, 500px);
-  max-height: 590px;
-  object-fit: contain;
-  filter: drop-shadow(0 35px 38px rgba(5, 22, 58, 0.36));
-}
-
-.emblem-halo {
+.hero-photo {
   position: absolute;
-  z-index: 1;
-  width: 470px;
-  max-width: 88%;
-  aspect-ratio: 1;
-  border: 1px solid rgba(255, 255, 255, 0.37);
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.17), rgba(255, 255, 255, 0.02) 58%, transparent 59%);
+  z-index: 2;
+  margin: 0;
+  overflow: hidden;
+  border: 9px solid rgba(255, 247, 234, 0.13);
+  background: #3a1c12;
+  box-shadow: 0 34px 70px rgba(18, 7, 3, 0.38);
 }
 
-.snow {
+.hero-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 1;
+  transition: opacity 420ms ease, transform 700ms ease;
+}
+
+.hero-photo img.is-changing {
+  opacity: 0;
+}
+
+.hero-photo-main {
+  top: 35px;
+  right: 0;
+  width: min(92%, 525px);
+  aspect-ratio: 4 / 5;
+  border-radius: 42px;
+  transform: rotate(2deg);
+}
+
+.hero-photo-main::after {
+  position: absolute;
+  inset: 52% 0 0;
+  background: linear-gradient(transparent, rgba(20, 7, 3, 0.74));
+  content: "";
+}
+
+.hero-photo figcaption {
+  position: absolute;
+  z-index: 2;
+  right: 22px;
+  bottom: 22px;
+  left: 22px;
+  padding: 14px 16px;
+  border: 1px solid rgba(255, 247, 234, 0.16);
+  border-radius: 20px;
+  background: rgba(37, 18, 12, 0.78);
+  color: #fff8ec;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.45;
+  backdrop-filter: blur(10px);
+}
+
+.hero-photo-secondary {
+  bottom: 46px;
+  left: 0;
+  width: 245px;
+  aspect-ratio: 4 / 5;
+  border-width: 7px;
+  border-radius: 32px;
+  transform: rotate(-5deg);
+}
+
+.hero-campaign-seal {
+  position: absolute;
+  z-index: 4;
+  top: 4px;
+  left: 3%;
+  width: 205px;
+  padding: 13px;
+  border: 1px solid rgba(88, 39, 19, 0.1);
+  border-radius: 32px;
+  background: rgba(255, 253, 248, 0.96);
+  box-shadow: 0 22px 46px rgba(18, 7, 3, 0.22);
+  transform: rotate(-3deg);
+}
+
+.hero-campaign-seal img {
+  width: 100%;
+}
+
+.hero-table-note {
   position: absolute;
   z-index: 5;
-  color: rgba(255, 255, 255, 0.78);
-}
-
-.snow-one {
-  top: 17%;
-  left: 9%;
-  font-size: 26px;
-}
-
-.snow-two {
-  right: 10%;
-  bottom: 31%;
-  font-size: 22px;
+  right: 11px;
+  bottom: 0;
+  max-width: 236px;
+  margin: 0;
+  padding: 15px 18px;
+  border-radius: 19px 19px 19px 5px;
+  background: #fff7e6;
+  box-shadow: 0 18px 36px rgba(18, 7, 3, 0.18);
+  color: #572914;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.38;
 }
 
 .hero-curve {
   position: absolute;
-  z-index: 3;
+  z-index: 1;
   right: -5%;
   bottom: -1px;
   left: 36%;
@@ -1088,15 +1175,18 @@ button {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 27px;
+  align-items: stretch;
 }
 
 .restaurant-card {
   position: relative;
+  display: flex;
   overflow: hidden;
   border: 1px solid rgba(23, 32, 68, 0.08);
   border-radius: 18px;
   background: var(--paper);
   box-shadow: 0 8px 28px rgba(17, 35, 72, 0.04);
+  flex-direction: column;
 }
 
 .card-media {
@@ -1106,7 +1196,7 @@ button {
   overflow: hidden;
   padding: 0;
   border: 0;
-  aspect-ratio: 1.25;
+  aspect-ratio: 1;
   background: var(--navy);
   color: inherit;
   cursor: pointer;
@@ -1130,6 +1220,7 @@ button {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center center;
 }
 
 .card-placeholder {
@@ -1209,7 +1300,10 @@ button {
 }
 
 .card-body {
+  display: flex;
   padding: 24px 24px 22px;
+  flex: 1;
+  flex-direction: column;
 }
 
 .card-restaurant {
@@ -1300,7 +1394,7 @@ button {
   min-height: 50px;
   align-items: center;
   justify-content: space-between;
-  margin-top: 17px;
+  margin-top: auto;
   padding: 9px 10px 9px 14px;
   border: 1px solid var(--line);
   border-radius: 10px;
@@ -1738,16 +1832,21 @@ button {
 
 .dialog-main-image {
   position: relative;
+  display: grid;
   overflow: hidden;
-  height: 540px;
+  height: clamp(360px, 58vh, 560px);
   border-radius: 13px;
-  background: var(--navy);
+  background:
+    radial-gradient(circle at 24% 20%, rgba(255, 255, 255, 0.08), transparent 32%),
+    linear-gradient(145deg, #1b120d, #101938);
+  place-items: center;
 }
 
 .dialog-main-image img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  object-position: center center;
 }
 
 .dialog-main-image .card-placeholder {
@@ -1912,7 +2011,15 @@ button {
   }
 
   .hero-facts div {
-    padding: 0 15px;
+    padding: 10px 15px;
+  }
+
+  .hero-photo-secondary {
+    width: 200px;
+  }
+
+  .hero-campaign-seal {
+    width: 170px;
   }
 
   .intro-grid {
@@ -2028,9 +2135,9 @@ button {
   .hero-grid {
     min-height: 0;
     padding-top: 133px;
-    padding-bottom: 105px;
+    padding-bottom: 94px;
     grid-template-columns: 1fr;
-    gap: 22px;
+    gap: 34px;
   }
 
   .hero-copy {
@@ -2042,16 +2149,41 @@ button {
   }
 
   .hero h1 em {
-    margin-left: 20%;
+    margin-left: 0;
   }
 
   .hero-art {
-    min-height: 330px;
+    min-height: 430px;
     margin-top: 0;
   }
 
-  .hero-art > img {
-    width: min(100%, 365px);
+  .hero-photo-main {
+    position: relative;
+    top: auto;
+    right: auto;
+    width: min(100%, 520px);
+    margin: 0 auto;
+    aspect-ratio: 16 / 11;
+    border-radius: 30px;
+    transform: none;
+  }
+
+  .hero-photo-secondary {
+    display: none;
+  }
+
+  .hero-campaign-seal {
+    top: -18px;
+    left: 17px;
+    width: 155px;
+    border-radius: 24px;
+    transform: rotate(-2deg);
+  }
+
+  .hero-table-note {
+    right: 18px;
+    bottom: 14px;
+    max-width: 220px;
   }
 
   .hero-curve {
@@ -2241,27 +2373,34 @@ button {
     --shell: calc(100% - 28px);
   }
 
+  .hero {
+    background:
+      linear-gradient(180deg, rgba(36, 18, 13, 0.96) 0%, rgba(82, 40, 23, 0.88) 48%, rgba(30, 15, 10, 0.95) 100%),
+      var(--hero-mobile-bg) center bottom / cover;
+  }
+
   .brand-copy strong {
     font-size: 16px;
   }
 
   .hero-grid {
-    padding-top: 115px;
-    padding-bottom: 82px;
+    padding-top: 99px;
+    padding-bottom: 66px;
   }
 
   .hero h1 {
-    font-size: clamp(52px, 16vw, 72px);
-    line-height: 0.92;
+    font-size: clamp(48px, 15vw, 64px);
+    line-height: 0.94;
   }
 
   .hero h1 em {
-    margin-left: 10%;
+    margin-left: 0;
   }
 
   .hero-lead {
-    margin-top: 25px;
-    font-size: 17px;
+    margin-top: 21px;
+    font-size: 16px;
+    line-height: 1.55;
   }
 
   .hero-actions {
@@ -2275,12 +2414,20 @@ button {
   }
 
   .hero-facts {
+    width: 100%;
+    margin-top: 28px;
+    padding: 7px;
+    border-radius: 18px;
     justify-content: space-between;
   }
 
   .hero-facts div {
     display: block;
-    padding: 0 11px;
+    padding: 8px 9px;
+  }
+
+  .hero-facts dt {
+    font-size: 22px;
   }
 
   .hero-facts dd {
@@ -2288,7 +2435,40 @@ button {
   }
 
   .hero-art {
-    display: none;
+    display: block;
+    min-height: 288px;
+    margin-top: -6px;
+  }
+
+  .hero-photo-main {
+    aspect-ratio: 1.2 / 1;
+    border-width: 7px;
+    border-radius: 24px;
+  }
+
+  .hero-photo figcaption {
+    right: 14px;
+    bottom: 14px;
+    left: 14px;
+    padding: 11px 12px;
+    border-radius: 15px;
+    font-size: 11px;
+  }
+
+  .hero-campaign-seal {
+    top: -14px;
+    left: 12px;
+    width: 120px;
+    padding: 8px;
+    border-radius: 18px;
+  }
+
+  .hero-table-note {
+    right: 11px;
+    bottom: 2px;
+    max-width: 166px;
+    padding: 11px 13px;
+    font-size: 11px;
   }
 
   .section-heading h2,

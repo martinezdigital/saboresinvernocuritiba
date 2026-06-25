@@ -22,8 +22,8 @@
       href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Lora:ital,wght@0,600;0,700;1,600;1,700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles.css?v=20260624-2" />
-    <script src="app.js" defer></script>
+    <link rel="stylesheet" href="styles.css?v=20260624-hero-final" />
+    <script src="app.js?v=20260624-hero-final" defer></script>
     <script src="votacao-oficial.js" defer></script>
   </head>
   <body>
@@ -64,7 +64,7 @@
               <span>Sabores do Inverno</span>
               <em>Curitiba</em>
             </h1>
-            <p class="hero-lead">Escolha seu menu, viva a experiência e dê sua nota aos melhores sabores da estação.</p>
+            <p class="hero-lead">Um convite para sentar à mesa, provar receitas de inverno e celebrar os restaurantes de Curitiba — com prato principal + sobremesa em valores fixos.</p>
             <div class="hero-actions">
               <a class="button button-orange" href="#votacao" data-voting-link data-active-label="Avaliar uma experiência" aria-disabled="true">
                 <span class="vote-link-label">Avaliação em breve</span><span aria-hidden="true">↗</span>
@@ -73,16 +73,23 @@
             </div>
             <dl class="hero-facts" aria-label="Informações rápidas">
               <div><dt>23</dt><dd>restaurantes</dd></div>
-              <div><dt>2</dt><dd>faixas de preço</dd></div>
-              <div><dt aria-hidden="true">★</dt><dd>avalie seu favorito</dd></div>
+              <div><dt>R$99</dt><dd>ou R$129</dd></div>
+              <div><dt aria-hidden="true">★</dt><dd>voto popular</dd></div>
             </dl>
           </div>
 
-          <div class="hero-art" aria-label="Emblema Inverno Curitiba da campanha">
-            <div class="emblem-halo"></div>
-            <img src="assets/brand/inverno-curitiba-logo.webp" alt="Inverno Curitiba" />
-            <span class="snow snow-one" aria-hidden="true">✦</span>
-            <span class="snow snow-two" aria-hidden="true">❄</span>
+          <div class="hero-art hero-table" aria-label="Mesa de inverno com pratos do festival">
+            <figure class="hero-photo hero-photo-main">
+              <img data-hero-main-image src="assets/restaurants/optimized/dina-pizza-2.jpg" alt="Pizza com pinhão sobre mesa de madeira" />
+              <figcaption data-hero-caption>Pinhão, receitas autorais e sabores da estação.</figcaption>
+            </figure>
+            <figure class="hero-photo hero-photo-secondary">
+              <img src="assets/restaurants/optimized/marie-vin-bistrot-1.jpg" alt="Prato de inverno servido em restaurante" />
+            </figure>
+            <div class="hero-campaign-seal">
+              <img src="assets/brand/inverno-curitiba-logo.webp" alt="Inverno Curitiba" />
+            </div>
+            <p class="hero-table-note">Menus exclusivos durante todo o mês de julho.</p>
           </div>
         </div>
         <div class="hero-curve" aria-hidden="true"></div>
