@@ -1661,6 +1661,19 @@ button {
   color: var(--navy);
   flex-direction: column;
   gap: 22px;
+  text-decoration: none;
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.footer-partner-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255, 255, 255, 0.28);
+  box-shadow: 0 18px 42px rgba(3, 11, 31, 0.18);
+}
+
+.footer-partner-card:focus-visible {
+  outline: 3px solid var(--orange);
+  outline-offset: 4px;
 }
 
 .footer-partner-primary {
