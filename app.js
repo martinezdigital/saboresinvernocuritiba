@@ -155,7 +155,7 @@ const restaurants = [
     service: "Almoço e jantar",
     description: "Mignon grelhado, creme de pinhão com parmesão, ragu de cogumelos, aspargos e bacon. Sobremesa: tarte tatin de maçã com sorvete de baunilha e caramelo salgado.",
     address: "Avenida Mal. Humberto de Alencar Castelo Branco, 251",
-    instagram: "@happyburgercwb",
+    instagram: "@happyburger.cwb",
     images: ["assets/restaurants/optimized/happy-burger-1.jpg"]
   },
   {
@@ -481,8 +481,8 @@ function instagramUrl(handle) {
   return handle ? `https://www.instagram.com/${handle.replace("@", "")}/` : null;
 }
 
-function mapUrl(address) {
-  return address ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${address}, Curitiba, PR`)}` : null;
+function mapUrl(address, name = "") {
+  return address ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${name ? `${name}, ` : ""}${address}, Curitiba, PR`)}` : null;
 }
 
 function dialogMarkup(restaurant) {
@@ -523,7 +523,7 @@ function dialogMarkup(restaurant) {
     ? escapeHtml(restaurant.service)
     : `<span class="missing">Horário não informado — a confirmar</span>`;
   const directions = addresses.map((unit) => `
-    <a class="dialog-direction" href="${mapUrl(unit.address)}" target="_blank" rel="noopener">
+    <a class="dialog-direction" href="${mapUrl(unit.address, restaurant.name)}" target="_blank" rel="noopener">
       ${addresses.length > 1 ? `Como chegar — ${escapeHtml(unit.label)}` : "Como chegar"} <span aria-hidden="true">↗</span>
     </a>`).join("");
   const social = restaurant.instagram
