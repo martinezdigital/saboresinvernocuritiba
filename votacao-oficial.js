@@ -1,6 +1,6 @@
 // Cole aqui o link oficial de avaliação fornecido pela Abrasel.
 // Exemplo: const OFFICIAL_VOTING_URL = "https://...";
-const OFFICIAL_VOTING_URL = "";
+const OFFICIAL_VOTING_URL = "https://forms.office.com/r/adJUWqDJkx?origin=lprLink";
 
 document.querySelectorAll("[data-voting-link]").forEach((link) => {
   const label = link.querySelector(".vote-link-label");
