@@ -334,6 +334,8 @@ const menuToggle = document.querySelector(".menu-toggle");
 const mainNav = document.querySelector(".main-nav");
 const heroMainImage = document.querySelector("[data-hero-main-image]");
 const heroCaption = document.querySelector("[data-hero-caption]");
+const heroVoteButton = document.querySelector(".hero-actions [data-voting-link]");
+const mobileVoteBar = document.querySelector(".mobile-vote-bar");
 
 let selectedPrice = "all";
 let selectedService = "all";
@@ -661,6 +663,31 @@ function initHeroSlides() {
   }, 7200);
 }
 
+function initMobileVoteBar() {
+  if (!mobileVoteBar || !heroVoteButton) return;
+
+  const mobileQuery = window.matchMedia("(max-width: 780px)");
+  let ticking = false;
+
+  const update = () => {
+    const heroButtonRect = heroVoteButton.getBoundingClientRect();
+    const shouldShow = mobileQuery.matches && heroButtonRect.bottom <= 0;
+    mobileVoteBar.classList.toggle("is-visible", shouldShow);
+    ticking = false;
+  };
+
+  const requestUpdate = () => {
+    if (ticking) return;
+    ticking = true;
+    window.requestAnimationFrame(update);
+  };
+
+  window.addEventListener("scroll", requestUpdate, { passive: true });
+  window.addEventListener("resize", requestUpdate);
+  mobileQuery.addEventListener?.("change", requestUpdate);
+  update();
+}
+
 priceButtons.forEach((button) => {
   button.addEventListener("click", () => {
     selectedPrice = button.dataset.price;
@@ -808,5 +835,6 @@ mainNav.addEventListener("click", (event) => {
 });
 
 initHeroSlides();
+initMobileVoteBar();
 renderRestaurants();
 initSectionTracking();

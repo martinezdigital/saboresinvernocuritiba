@@ -2214,6 +2214,10 @@ button {
     display: none;
   }
 
+  .hero-photo figcaption {
+    display: none;
+  }
+
   .hero-campaign-seal {
     top: -18px;
     left: 17px;
@@ -2226,6 +2230,7 @@ button {
     right: 18px;
     bottom: 14px;
     max-width: 220px;
+    text-align: center;
   }
 
   .hero-curve {
@@ -2325,6 +2330,17 @@ button {
     height: var(--dialog-image-height, clamp(290px, 58vw, 460px));
   }
 
+  .dialog-main-image img {
+    position: absolute;
+    inset: 0;
+    max-width: 100%;
+    max-height: 100%;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    object-position: center center !important;
+  }
+
   .dialog-info {
     padding: 40px 28px 45px;
   }
@@ -2370,6 +2386,17 @@ button {
     background: var(--orange);
     box-shadow: 0 10px 28px rgba(8, 22, 53, 0.22);
     color: #fff;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(calc(100% + 22px));
+    transition: opacity 220ms ease, transform 260ms ease;
+    will-change: transform, opacity;
+  }
+
+  .mobile-vote-bar.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
   }
 
   .mobile-vote-bar > span {
@@ -2504,12 +2531,7 @@ button {
   }
 
   .hero-photo figcaption {
-    right: 14px;
-    bottom: 14px;
-    left: 14px;
-    padding: 11px 12px;
-    border-radius: 15px;
-    font-size: 11px;
+    display: none;
   }
 
   .hero-campaign-seal {
@@ -2522,11 +2544,15 @@ button {
   }
 
   .hero-table-note {
-    right: 11px;
-    bottom: 11px;
-    max-width: 166px;
-    padding: 11px 13px;
-    font-size: 11px;
+    right: 14px;
+    bottom: 14px;
+    left: 14px;
+    max-width: none;
+    padding: 13px 14px;
+    border-radius: 17px;
+    font-size: 12px;
+    line-height: 1.35;
+    text-align: center;
   }
 
   .section-heading h2,
