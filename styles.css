@@ -928,9 +928,8 @@ button {
 }
 
 .institutional-logo {
-  position: relative;
-  z-index: 1;
-  width: min(100%, 340px);
+  display: block;
+  width: 100%;
   height: auto;
   border-radius: 0;
   box-shadow: 0 14px 35px rgba(11, 64, 129, 0.18);
@@ -940,6 +939,8 @@ button {
   position: relative;
   z-index: 1;
   display: inline-flex;
+  width: min(100%, 340px);
+  justify-content: center;
   transition: transform 180ms ease;
 }
 
@@ -2133,6 +2134,7 @@ button {
   .site-header {
     background: #fffdf8;
     color: var(--navy);
+    box-shadow: 0 8px 24px rgba(10, 28, 63, 0.08);
   }
 
   .menu-toggle {
@@ -2426,7 +2428,8 @@ button {
 
   .hero-grid {
     padding-top: 99px;
-    padding-bottom: 66px;
+    padding-bottom: 58px;
+    gap: 28px;
   }
 
   .hero h1 {
@@ -2476,15 +2479,28 @@ button {
   }
 
   .hero-art {
-    display: block;
-    min-height: 288px;
-    margin-top: -6px;
+    display: grid;
+    min-height: 0;
+    margin-top: 0;
+    gap: 12px;
+  }
+
+  .hero-photo {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    transform: none;
   }
 
   .hero-photo-main {
+    width: 100%;
     aspect-ratio: 1.2 / 1;
     border-width: 7px;
     border-radius: 24px;
+  }
+
+  .hero-photo-secondary {
+    display: none;
   }
 
   .hero-photo figcaption {
@@ -2497,16 +2513,17 @@ button {
   }
 
   .hero-campaign-seal {
-    top: -14px;
-    left: 12px;
+    top: 10px;
+    left: 10px;
     width: 120px;
     padding: 8px;
     border-radius: 18px;
+    transform: none;
   }
 
   .hero-table-note {
     right: 11px;
-    bottom: 2px;
+    bottom: 11px;
     max-width: 166px;
     padding: 11px 13px;
     font-size: 11px;
