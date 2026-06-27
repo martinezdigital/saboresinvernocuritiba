@@ -789,9 +789,9 @@ function initSectionTracking() {
   if (!("IntersectionObserver" in window)) return;
 
   const trackedSections = [
-    { id: "premio", name: "centro_europeu" },
-    { id: "restaurantes", name: "lista_restaurantes" },
-    { id: "votacao", name: "votacao" }
+    { id: "premio", name: "centro_europeu", directEvent: "centro_europeu_view" },
+    { id: "restaurantes", name: "lista_restaurantes", directEvent: "restaurant_list_view" },
+    { id: "votacao", name: "votacao", directEvent: "voting_section_view" }
   ];
 
   const observer = new IntersectionObserver((entries) => {
@@ -800,6 +800,10 @@ function initSectionTracking() {
       const section = trackedSections.find((item) => item.id === entry.target.id);
       if (!section) return;
       trackEvent("section_view", {
+        section_id: section.id,
+        section_name: section.name
+      });
+      trackEvent(section.directEvent, {
         section_id: section.id,
         section_name: section.name
       });
