@@ -379,6 +379,44 @@ const normalizeText = (value = "") => String(value)
   .toLowerCase()
   .trim();
 
+function trackEvent(eventName, parameters = {}) {
+  if (typeof window.gtag !== "function") return;
+  window.gtag("event", eventName, parameters);
+}
+
+function linkLabel(link) {
+  return (link.textContent || "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 120);
+}
+
+function linkArea(link) {
+  const section = link.closest("section, footer, header");
+  if (section?.id) return section.id;
+  if (link.closest(".mobile-vote-bar")) return "mobile_vote_bar";
+  if (link.closest(".restaurant-dialog")) return "restaurant_dialog";
+  return "site";
+}
+
+function restaurantAnalyticsPayload(restaurant) {
+  return {
+    restaurant_slug: restaurant.slug,
+    restaurant_name: restaurant.name,
+    dish_name: restaurant.dish,
+    price: restaurant.price
+  };
+}
+
+function trackRestaurantPageView(restaurant) {
+  if (typeof window.gtag !== "function") return;
+  window.gtag("event", "page_view", {
+    page_title: `${restaurant.name} — ${restaurant.dish}`,
+    page_location: `${window.location.origin}/restaurantes/${restaurant.slug}`,
+    page_path: `/restaurantes/${restaurant.slug}`
+  });
+}
+
 const locationIcon = `
   <svg aria-hidden="true" viewBox="0 0 24 24">
     <path d="M20 10c0 5.25-8 11-8 11S4 15.25 4 10a8 8 0 1 1 16 0Z"/>
@@ -523,11 +561,11 @@ function dialogMarkup(restaurant) {
     ? escapeHtml(restaurant.service)
     : `<span class="missing">Horário não informado — a confirmar</span>`;
   const directions = addresses.map((unit) => `
-    <a class="dialog-direction" href="${mapUrl(unit.address, restaurant.name)}" target="_blank" rel="noopener">
+    <a class="dialog-direction" href="${mapUrl(unit.address, restaurant.name)}" target="_blank" rel="noopener" data-track-restaurant="${escapeHtml(restaurant.slug)}" data-track-address="${escapeHtml(unit.address)}">
       ${addresses.length > 1 ? `Como chegar — ${escapeHtml(unit.label)}` : "Como chegar"} <span aria-hidden="true">↗</span>
     </a>`).join("");
   const social = restaurant.instagram
-    ? `<a href="${instagramUrl(restaurant.instagram)}" target="_blank" rel="noopener">Ver Instagram <span aria-hidden="true">↗</span></a>`
+    ? `<a class="dialog-instagram" href="${instagramUrl(restaurant.instagram)}" target="_blank" rel="noopener" data-track-restaurant="${escapeHtml(restaurant.slug)}">Ver Instagram <span aria-hidden="true">↗</span></a>`
     : "";
 
   return `
@@ -558,6 +596,8 @@ function openRestaurant(slug) {
   dialogContent.innerHTML = dialogMarkup(restaurant);
   dialog.showModal();
   document.body.classList.add("dialog-open");
+  trackEvent("restaurant_view", restaurantAnalyticsPayload(restaurant));
+  trackRestaurantPageView(restaurant);
 }
 
 function closeDialog() {
@@ -671,6 +711,81 @@ dialog.addEventListener("click", (event) => {
 });
 dialog.addEventListener("close", () => document.body.classList.remove("dialog-open"));
 
+document.addEventListener("click", (event) => {
+  const voteLink = event.target.closest("[data-voting-link]");
+  if (voteLink && !voteLink.classList.contains("is-awaiting-link")) {
+    trackEvent("vote_form_click", {
+      link_text: linkLabel(voteLink),
+      link_url: voteLink.href,
+      link_area: linkArea(voteLink)
+    });
+  }
+
+  const centroEuropeuLink = event.target.closest('a[href*="centroeuropeu.com.br"]');
+  if (centroEuropeuLink) {
+    trackEvent("centro_europeu_click", {
+      link_text: linkLabel(centroEuropeuLink) || "Centro Europeu",
+      link_url: centroEuropeuLink.href,
+      link_area: linkArea(centroEuropeuLink)
+    });
+  }
+
+  const partnerLink = event.target.closest(".footer-partner-card");
+  if (partnerLink) {
+    trackEvent("partner_instagram_click", {
+      partner_name: partnerLink.querySelector("img")?.alt || linkLabel(partnerLink),
+      link_url: partnerLink.href
+    });
+  }
+
+  const mapLink = event.target.closest(".dialog-direction");
+  if (mapLink) {
+    const restaurant = restaurants.find((item) => item.slug === mapLink.dataset.trackRestaurant);
+    trackEvent("restaurant_map_click", {
+      ...(restaurant ? restaurantAnalyticsPayload(restaurant) : {}),
+      address: mapLink.dataset.trackAddress || "",
+      link_url: mapLink.href
+    });
+  }
+
+  const instagramLink = event.target.closest(".dialog-instagram");
+  if (instagramLink) {
+    const restaurant = restaurants.find((item) => item.slug === instagramLink.dataset.trackRestaurant);
+    trackEvent("restaurant_instagram_click", {
+      ...(restaurant ? restaurantAnalyticsPayload(restaurant) : {}),
+      link_url: instagramLink.href
+    });
+  }
+});
+
+function initSectionTracking() {
+  if (!("IntersectionObserver" in window)) return;
+
+  const trackedSections = [
+    { id: "premio", name: "centro_europeu" },
+    { id: "restaurantes", name: "lista_restaurantes" },
+    { id: "votacao", name: "votacao" }
+  ];
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      const section = trackedSections.find((item) => item.id === entry.target.id);
+      if (!section) return;
+      trackEvent("section_view", {
+        section_id: section.id,
+        section_name: section.name
+      });
+      observer.unobserve(entry.target);
+    });
+  }, { threshold: 0.45 });
+
+  trackedSections.forEach((section) => {
+    const element = document.getElementById(section.id);
+    if (element) observer.observe(element);
+  });
+}
+
 function updateHeader() {
   header.classList.toggle("is-scrolled", window.scrollY > 28);
 }
@@ -694,3 +809,4 @@ mainNav.addEventListener("click", (event) => {
 
 initHeroSlides();
 renderRestaurants();
+initSectionTracking();

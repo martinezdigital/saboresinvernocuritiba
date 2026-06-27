@@ -22,9 +22,16 @@
       href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Lora:ital,wght@0,600;0,700;1,600;1,700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles.css?v=20260627-final-mobile" />
-    <script src="app.js?v=20260627-final-mobile" defer></script>
-    <script src="votacao-oficial.js?v=20260627-form" defer></script>
+    <link rel="stylesheet" href="styles.css?v=20260627-analytics-cta" />
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2K70ZFH6ZS"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag("js", new Date());
+      gtag("config", "G-2K70ZFH6ZS");
+    </script>
+    <script src="app.js?v=20260627-analytics-cta" defer></script>
+    <script src="votacao-oficial.js?v=20260627-analytics-cta" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
@@ -48,7 +55,7 @@
           <a href="#como-pedir">Como pedir</a>
           <a href="#restaurantes">Menus</a>
           <a href="#premio">Centro Europeu</a>
-          <a class="nav-pill" href="#votacao" data-voting-link data-active-label="Avaliar agora" aria-disabled="true"><span class="vote-link-label">Avaliação em breve</span></a>
+          <a class="nav-pill" href="#votacao" data-voting-link data-active-label="Votar agora" aria-disabled="true"><span class="vote-link-label">Avaliação em breve</span></a>
         </nav>
       </div>
     </header>
@@ -66,7 +73,7 @@
             </h1>
             <p class="hero-lead">Um convite para sentar à mesa, provar receitas de inverno e celebrar os restaurantes de Curitiba — com prato principal + sobremesa em valores fixos.</p>
             <div class="hero-actions">
-              <a class="button button-orange" href="#votacao" data-voting-link data-active-label="Avaliar uma experiência" aria-disabled="true">
+              <a class="button button-orange" href="#votacao" data-voting-link data-active-label="Vote na sua receita favorita" aria-disabled="true">
                 <span class="vote-link-label">Avaliação em breve</span><span aria-hidden="true">↗</span>
               </a>
               <a class="text-link" href="#restaurantes">Ver menus participantes <span aria-hidden="true">↓</span></a>
@@ -134,7 +141,7 @@
           </ol>
           <div class="quick-guide-actions">
             <a class="button button-blue" href="#restaurantes">Escolher um menu <span aria-hidden="true">↓</span></a>
-            <a class="button button-orange" href="#votacao" data-voting-link data-active-label="Abrir formulário oficial" aria-disabled="true">
+            <a class="button button-orange" href="#votacao" data-voting-link data-active-label="Vote na sua receita favorita" aria-disabled="true">
               <span class="vote-link-label">Avaliação em breve</span><span aria-hidden="true">↗</span>
             </a>
           </div>
@@ -212,12 +219,12 @@
         <div class="shell vote-card">
           <div class="vote-copy">
             <p class="eyebrow">Sua nota faz parte</p>
-            <h2>Avalie sua experiência.</h2>
+            <h2>Vote na sua receita favorita.</h2>
             <p>
               Depois de experimentar, dê sua nota no formulário oficial da Abrasel. O restaurante com a maior
               média será o vencedor da temporada.
             </p>
-            <a class="vote-status" href="#votacao" data-voting-link aria-disabled="true">
+            <a class="vote-status" href="#votacao" data-voting-link data-active-label="Abrir votação oficial" aria-disabled="true">
               <span class="vote-link-label">Avaliação em breve</span>
               <span aria-hidden="true">→</span>
             </a>
@@ -233,7 +240,7 @@
 
     </main>
 
-    <a class="mobile-vote-bar" href="#votacao" data-voting-link data-active-label="Avaliar experiência" aria-disabled="true">
+    <a class="mobile-vote-bar" href="#votacao" data-voting-link data-active-label="Vote na sua receita favorita" aria-disabled="true">
       <span><small>Já experimentou?</small><strong class="vote-link-label">Avaliação em breve</strong></span>
       <i aria-hidden="true">↗</i>
     </a>

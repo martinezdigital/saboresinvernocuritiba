@@ -12,7 +12,7 @@ document.querySelectorAll("[data-voting-link]").forEach((link) => {
     link.rel = "noopener noreferrer";
     link.removeAttribute("aria-disabled");
     link.classList.remove("is-awaiting-link");
-    if (label) label.textContent = link.dataset.activeLabel || "Avaliar uma experiência";
+    if (label) label.textContent = link.dataset.activeLabel || "Vote na sua receita favorita";
     return;
   }
 
