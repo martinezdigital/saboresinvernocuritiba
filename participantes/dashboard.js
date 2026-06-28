@@ -555,6 +555,7 @@ function friendlyEventLabel(label = "") {
   if (normalized.includes("centro")) return "Cliques no Centro Europeu";
   if (normalized.includes("instagram")) return "Cliques no Instagram";
   if (normalized.includes("rota") || normalized.includes("mapa")) return "Buscas no mapa";
+  if (normalized.includes("vota")) return "Cliques na votação";
   return label || "Ação do público";
 }
 
