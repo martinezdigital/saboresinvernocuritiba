@@ -30,7 +30,7 @@ jobs:
       - name: Montar pacote estático
         run: |
           mkdir _site
-          cp -R index.html styles.css app.js votacao-oficial.js CNAME .nojekyll assets _site/
+          cp -R index.html styles.css app.js analytics-config.js votacao-oficial.js CNAME .nojekyll assets participantes _site/
 
       - name: Enviar pacote
         uses: actions/upload-pages-artifact@v3
