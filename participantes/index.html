@@ -17,8 +17,8 @@
     <header class="dashboard-hero">
       <div>
         <p class="eyebrow">Painel dos restaurantes</p>
-        <h1>Desempenho dos menus participantes</h1>
-        <p class="hero-copy">Acompanhe como o público está reagindo à ação: pratos mais consultados, cliques para Instagram, buscas de rota e cidades de onde vêm os acessos.</p>
+        <h1>Relatório simples do Festival Sabores do Inverno</h1>
+        <p class="hero-copy">Uma leitura direta para os restaurantes participantes acompanharem o interesse do público: acessos aos menus, cliques para Instagram, rotas no mapa, alcance por cidade e visibilidade dos parceiros da ação.</p>
       </div>
       <div class="hero-status">
         <span id="source-label">Carregando dados…</span>
@@ -26,39 +26,13 @@
       </div>
     </header>
 
-    <section class="controls-card" aria-label="Filtros do dashboard">
+    <section class="report-note" aria-label="Período do relatório">
       <div>
-        <label for="period-filter">Período de análise</label>
-        <select id="period-filter">
-          <option value="today">Hoje</option>
-          <option value="7d" selected>Últimos 7 dias</option>
-          <option value="28d">Últimos 28 dias</option>
-          <option value="all">Todo o período</option>
-        </select>
+        <p class="eyebrow">Período considerado</p>
+        <strong>Todo o período do festival</strong>
+        <span>Os indicadores principais sempre mostram o acumulado da ação. O gráfico de movimento permite comparar 7 dias, 30 dias e todo o período.</span>
       </div>
-      <div>
-        <label for="metric-focus">Ordenar ranking por</label>
-        <select id="metric-focus">
-          <option value="views" selected>Pratos mais consultados</option>
-          <option value="instagram">Mais cliques no Instagram</option>
-          <option value="maps">Mais buscas de rota</option>
-        </select>
-      </div>
-    </section>
-
-    <section class="help-strip" aria-label="Como ler o painel">
-      <article>
-        <span>1</span>
-        <p><strong>Menu consultado</strong> mostra interesse direto no prato participante.</p>
-      </article>
-      <article>
-        <span>2</span>
-        <p><strong>Instagram e rotas</strong> indicam intenção de conhecer melhor ou visitar o restaurante.</p>
-      </article>
-      <article>
-        <span>3</span>
-        <p><strong>Índice de interesse</strong> combina os sinais para comparar o desempenho dos menus.</p>
-      </article>
+      <a href="#meu-restaurante">Encontrar meu restaurante</a>
     </section>
 
     <section class="live-panel" aria-label="Resumo em tempo real">
@@ -108,6 +82,28 @@
       </article>
     </section>
 
+    <section id="meu-restaurante" class="panel restaurant-finder" aria-label="Consulta por restaurante">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">Consulta rápida</p>
+          <h2>Encontre seu restaurante</h2>
+        </div>
+        <span class="panel-note">dados do período total</span>
+      </div>
+      <div class="finder-grid">
+        <div class="finder-control">
+          <label for="restaurant-select">Escolha o restaurante</label>
+          <select id="restaurant-select">
+            <option value="">Selecione para ver os números</option>
+          </select>
+          <p>Clique no seu restaurante para ver, sem complicação, quantas pessoas abriram o menu e quantas demonstraram intenção pelo Instagram ou pelo mapa.</p>
+        </div>
+        <div id="restaurant-spotlight" class="restaurant-spotlight" aria-live="polite">
+          <span class="empty-state">Selecione um restaurante para destacar os dados.</span>
+        </div>
+      </div>
+    </section>
+
     <section class="dashboard-grid">
       <article class="panel panel-wide">
         <div class="panel-heading">
@@ -115,7 +111,11 @@
             <p class="eyebrow">Movimento do público</p>
             <h2>Interesse ao longo dos dias</h2>
           </div>
-          <span class="panel-note">picos de visita</span>
+          <div id="timeline-controls" class="segmented-controls" aria-label="Período do gráfico">
+            <button type="button" data-period="all" class="is-active">Todo período</button>
+            <button type="button" data-period="30d">30 dias</button>
+            <button type="button" data-period="7d">7 dias</button>
+          </div>
         </div>
         <div id="timeline-chart" class="timeline-chart" aria-label="Gráfico de acessos ao longo do tempo"></div>
       </article>
@@ -134,7 +134,7 @@
             <span>Os pontos serão exibidos por cidade.</span>
           </div>
         </div>
-        <p class="map-caption">Cada ponto representa concentração de usuários por cidade. A lista abaixo mostra as cidades com maior presença.</p>
+        <p class="map-caption">O mapa mostra de onde vêm as pessoas que buscaram informações sobre o festival. É uma forma simples de enxergar o alcance turístico e regional da ação.</p>
         <ol id="city-list" class="city-list"></ol>
       </article>
 
@@ -156,7 +156,7 @@
             <strong id="centro-clicks">—</strong>
           </div>
         </div>
-        <p class="panel-copy">Acompanha a visibilidade do apoio de capacitação e quantas pessoas demonstraram interesse em conhecer o Centro Europeu.</p>
+        <p id="centro-copy" class="panel-copy">A chancela do Centro Europeu reforça o posicionamento de capacitação, excelência e desenvolvimento da gastronomia local.</p>
       </article>
     </section>
 
@@ -166,8 +166,22 @@
           <p class="eyebrow">Desempenho por participante</p>
           <h2>Como os menus estão performando</h2>
         </div>
-        <span class="panel-note">menu, Instagram e rota</span>
+        <span class="panel-note">clique em uma linha para destacar</span>
       </div>
+      <section class="metric-legend" aria-label="Como ler a tabela">
+        <article>
+          <span>Menu consultado</span>
+          <p>Mostra quantas vezes o público abriu a página do prato participante.</p>
+        </article>
+        <article>
+          <span>Instagram e rotas</span>
+          <p>Indicam intenção de conhecer melhor o restaurante ou planejar a visita.</p>
+        </article>
+        <article>
+          <span>Índice de interesse</span>
+          <p>Resume os sinais em uma pontuação simples para facilitar a leitura.</p>
+        </article>
+      </section>
       <div class="table-wrap">
         <table>
           <thead>
@@ -207,9 +221,9 @@
     </section>
   </main>
 
-  <script src="ga-config.js?v=20260628-ga4-final" defer></script>
+  <script src="ga-config.js?v=20260628-owner-report" defer></script>
   <script src="supabase-config.js?v=20260627-live-data" defer></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
-  <script src="dashboard.js?v=20260628-ga4-final" defer></script>
+  <script src="dashboard.js?v=20260628-owner-report" defer></script>
 </body>
 </html>
