@@ -1,0 +1,79 @@
+{
+  "source": "demo",
+  "updatedAt": "2026-06-27T15:35:00-03:00",
+  "totals": {
+    "users": 68,
+    "pageviews": 492,
+    "restaurantViews": 127,
+    "voteClicks": 0
+  },
+  "centroEuropeu": {
+    "sectionViews": 23,
+    "clicks": 4
+  },
+  "realtime": {
+    "activeUsers": 4,
+    "activeRestaurants": [
+      { "name": "Bar do Alemão", "dish": "Inverno na Floresta Negra", "visitors": 2, "when": "agora" },
+      { "name": "Dina Pizza", "dish": "Pizza Costela Serrana", "visitors": 1, "when": "há 1 min" },
+      { "name": "Happy Burger", "dish": "Mignon de Inverno", "visitors": 1, "when": "há 3 min" }
+    ],
+    "actions": [
+      { "label": "Busca de rota", "restaurant": "Bar do Alemão", "when": "há 1 min" },
+      { "label": "Clique no Instagram", "restaurant": "Happy Burger", "when": "há 2 min" },
+      { "label": "Menu aberto", "restaurant": "Dina Pizza", "when": "há 3 min" }
+    ]
+  },
+  "timeline": [
+    { "label": "21/06", "value": 18 },
+    { "label": "22/06", "value": 31 },
+    { "label": "23/06", "value": 42 },
+    { "label": "24/06", "value": 58 },
+    { "label": "25/06", "value": 82 },
+    { "label": "26/06", "value": 119 },
+    { "label": "27/06", "value": 142 }
+  ],
+  "cities": [
+    { "city": "Curitiba", "users": 42, "lat": -25.4284, "lng": -49.2733 },
+    { "city": "São Paulo", "users": 8, "lat": -23.5505, "lng": -46.6333 },
+    { "city": "São José dos Pinhais", "users": 5, "lat": -25.5313, "lng": -49.2031 },
+    { "city": "Araucária", "users": 3, "lat": -25.5931, "lng": -49.4103 },
+    { "city": "Pinhais", "users": 3, "lat": -25.4449, "lng": -49.1927 },
+    { "city": "Colombo", "users": 2, "lat": -25.2925, "lng": -49.2242 },
+    { "city": "Campo Largo", "users": 2, "lat": -25.4595, "lng": -49.5276 },
+    { "city": "Florianópolis", "users": 2, "lat": -27.5949, "lng": -48.5482 },
+    { "city": "Porto Alegre", "users": 1, "lat": -30.0346, "lng": -51.2177 }
+  ],
+  "restaurants": [
+    { "name": "Alchemia Bar e Restaurante", "dish": "Do Solo ao Colo", "views": 5, "instagram": 1, "maps": 1 },
+    { "name": "Bar do Alemão", "dish": "Inverno na Floresta Negra", "views": 12, "instagram": 4, "maps": 5 },
+    { "name": "Cantina do Délio", "dish": "Conchiglione di Gorgonzola e Cubos de Mignon", "views": 9, "instagram": 3, "maps": 4 },
+    { "name": "Cantina e Pizzaria Baviera", "dish": "Sopa de Cebola", "views": 10, "instagram": 2, "maps": 3 },
+    { "name": "Carlo Ristorante", "dish": "Risoto de Linguiça Blumenau com Pinhão", "views": 6, "instagram": 2, "maps": 2 },
+    { "name": "Chef Express", "dish": "Super Filé Mignon à Parmegiana", "views": 5, "instagram": 1, "maps": 2 },
+    { "name": "Cutelaria Carne com Cerveja", "dish": "Tomahawk com Legumes Braseados", "views": 4, "instagram": 1, "maps": 2 },
+    { "name": "Dina Pizza", "dish": "Pizza Costela Serrana", "views": 5, "instagram": 2, "maps": 1 },
+    { "name": "Dom Carmino Pizzaria", "dish": "Pizza, Vinho e Petit Gateau", "views": 8, "instagram": 3, "maps": 2 },
+    { "name": "Doppo Cucina", "dish": "Lasagna de Vitelo", "views": 7, "instagram": 1, "maps": 2 },
+    { "name": "Galeteria Caxias", "dish": "Rodízio Italiano", "views": 3, "instagram": 1, "maps": 1 },
+    { "name": "Happy Burger", "dish": "Mignon de Inverno", "views": 6, "instagram": 3, "maps": 2 },
+    { "name": "Hard Rock Cafe Curitiba", "dish": "Grilled Salmon + Cheesecake", "views": 6, "instagram": 2, "maps": 2 },
+    { "name": "Imaginum Sushi", "dish": "Yakisoba + Sobremesa", "views": 4, "instagram": 1, "maps": 1 },
+    { "name": "Limoeiro Casa de Comidas", "dish": "Ossobuco com Risotto alla Milanese", "views": 4, "instagram": 1, "maps": 1 },
+    { "name": "Maias Sushi", "dish": "Combinado Maias 50 Peças", "views": 4, "instagram": 1, "maps": 1 },
+    { "name": "Marie Vin e Bistrot", "dish": "Médaillon de Mignon du Chef au Café de Paris", "views": 5, "instagram": 2, "maps": 1 },
+    { "name": "Opera Arte", "dish": "Capeletti Pilagalli Sabor Paraná", "views": 3, "instagram": 1, "maps": 1 },
+    { "name": "Peruano Gastronomia e Cultura", "dish": "Chupe de Camarão", "views": 4, "instagram": 1, "maps": 1 },
+    { "name": "Quintal do Monge", "dish": "Mignon à Parmegiana com Massa", "views": 5, "instagram": 1, "maps": 2 },
+    { "name": "Quitutto", "dish": "Cupim pra Banguela aos Queijos", "views": 5, "instagram": 1, "maps": 2 },
+    { "name": "Tuk Tuk", "dish": "Golden Seafood", "views": 3, "instagram": 1, "maps": 1 },
+    { "name": "Villa Bistrô", "dish": "Parmegiana de Mignon e Torta de Pistache", "views": 4, "instagram": 1, "maps": 1 }
+  ],
+  "events": [
+    { "label": "Pratos consultados", "value": 127 },
+    { "label": "Cliques para Instagram", "value": 37 },
+    { "label": "Buscas de rota", "value": 41 },
+    { "label": "Cliques no Centro Europeu", "value": 4 },
+    { "label": "Cliques para votar", "value": 0 }
+  ]
+}

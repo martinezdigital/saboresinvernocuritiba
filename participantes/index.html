@@ -3,65 +3,212 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Painel dos Restaurantes — Sabores do Inverno Curitiba</title>
   <meta name="robots" content="noindex, nofollow">
-  <title>Painel dos Participantes — Sabores do Inverno Curitiba</title>
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    html,
-    body {
-      width: 100%;
-      height: 100%;
-      margin: 0;
-      background: #101a45;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
-
-    .panel-frame {
-      display: block;
-      width: 100%;
-      height: 100%;
-      min-height: 100dvh;
-      border: 0;
-      background: #fff8eb;
-    }
-
-    .loading {
-      position: fixed;
-      inset: 0;
-      display: grid;
-      place-items: center;
-      padding: 24px;
-      color: #fff8eb;
-      text-align: center;
-      background: radial-gradient(circle at 50% 0%, rgba(242, 106, 0, .22), transparent 28rem), #101a45;
-    }
-
-    .loading strong {
-      display: block;
-      margin-bottom: 8px;
-      font-size: clamp(1.3rem, 4vw, 2rem);
-    }
-
-    .loading span {
-      color: rgba(255, 248, 235, .72);
-    }
-  </style>
+  <link rel="icon" href="assets/brand/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&family=Libre+Baskerville:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIINfQATv3Qlc8QGeF4S2hR2AT6X4pXhZ4M=" crossorigin="">
+  <link rel="stylesheet" href="dashboard.css">
 </head>
 <body>
-  <div class="loading" aria-hidden="true">
-    <p>
-      <strong>Carregando painel dos participantes</strong>
-      <span>Sabores do Inverno Curitiba</span>
-    </p>
-  </div>
-  <iframe
-    class="panel-frame"
-    title="Painel dos participantes do Sabores do Inverno Curitiba"
-    src="https://martinezdigital.github.io/painel-sabores-inverno/?origem=participantes&v=20260627-live-data"
-    loading="eager"
-  ></iframe>
+  <main class="dashboard-shell">
+    <header class="dashboard-hero">
+      <div>
+        <p class="eyebrow">Painel dos restaurantes</p>
+        <h1>Desempenho dos menus participantes</h1>
+        <p class="hero-copy">Acompanhe como o público está reagindo à ação: pratos mais consultados, cliques para Instagram, buscas de rota e cidades de onde vêm os acessos.</p>
+      </div>
+      <div class="hero-status">
+        <span id="source-label">Carregando dados…</span>
+        <strong id="updated-at">—</strong>
+      </div>
+    </header>
+
+    <section class="controls-card" aria-label="Filtros do dashboard">
+      <div>
+        <label for="period-filter">Período de análise</label>
+        <select id="period-filter">
+          <option value="today">Hoje</option>
+          <option value="7d" selected>Últimos 7 dias</option>
+          <option value="28d">Últimos 28 dias</option>
+          <option value="all">Todo o período</option>
+        </select>
+      </div>
+      <div>
+        <label for="metric-focus">Ordenar ranking por</label>
+        <select id="metric-focus">
+          <option value="views" selected>Pratos mais consultados</option>
+          <option value="instagram">Mais cliques no Instagram</option>
+          <option value="maps">Mais buscas de rota</option>
+        </select>
+      </div>
+    </section>
+
+    <section class="help-strip" aria-label="Como ler o painel">
+      <article>
+        <span>1</span>
+        <p><strong>Menu consultado</strong> mostra interesse direto no prato participante.</p>
+      </article>
+      <article>
+        <span>2</span>
+        <p><strong>Instagram e rotas</strong> indicam intenção de conhecer melhor ou visitar o restaurante.</p>
+      </article>
+      <article>
+        <span>3</span>
+        <p><strong>Índice de interesse</strong> combina os sinais para comparar o desempenho dos menus.</p>
+      </article>
+    </section>
+
+    <section class="live-panel" aria-label="Resumo em tempo real">
+      <div class="live-heading">
+        <div>
+          <p class="eyebrow">Agora no site</p>
+          <h2>Resumo em tempo real</h2>
+        </div>
+        <div class="live-users">
+          <span>Usuários ativos</span>
+          <strong id="realtime-users">—</strong>
+        </div>
+      </div>
+      <div class="live-grid">
+        <article>
+          <h3>Menus sendo visitados</h3>
+          <ul id="live-restaurants" class="live-list"></ul>
+        </article>
+        <article>
+          <h3>Últimas ações importantes</h3>
+          <ul id="live-actions" class="live-list"></ul>
+        </article>
+      </div>
+      <p id="realtime-note" class="live-note">Quando conectado à base real, este bloco mostra os acessos ativos e os menus abertos nos últimos minutos.</p>
+    </section>
+
+    <section class="kpi-grid" aria-label="Indicadores principais">
+      <article class="kpi-card">
+        <span>Pessoas alcançadas</span>
+        <strong id="kpi-users">—</strong>
+        <small id="kpi-users-note">usuários estimados</small>
+      </article>
+      <article class="kpi-card">
+        <span>Interações no site</span>
+        <strong id="kpi-pageviews">—</strong>
+        <small>visitas, menus e cliques</small>
+      </article>
+      <article class="kpi-card">
+        <span>Pratos consultados</span>
+        <strong id="kpi-restaurant-views">—</strong>
+        <small>aberturas dos menus</small>
+      </article>
+      <article class="kpi-card kpi-accent">
+        <span>Cliques para votar</span>
+        <strong id="kpi-votes">—</strong>
+        <small>quando a votação abrir</small>
+      </article>
+    </section>
+
+    <section class="dashboard-grid">
+      <article class="panel panel-wide">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Movimento do público</p>
+            <h2>Interesse ao longo dos dias</h2>
+          </div>
+          <span class="panel-note">picos de visita</span>
+        </div>
+        <div id="timeline-chart" class="timeline-chart" aria-label="Gráfico de acessos ao longo do tempo"></div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Alcance da ação</p>
+            <h2>De onde vem o público</h2>
+          </div>
+          <span id="city-count" class="panel-note">—</span>
+        </div>
+        <div id="city-map" class="city-map" role="img" aria-label="Mapa com cidades de origem dos acessos">
+          <div class="map-fallback">
+            <strong>Mapa carregando…</strong>
+            <span>Os pontos serão exibidos por cidade.</span>
+          </div>
+        </div>
+        <p class="map-caption">Cada ponto representa concentração de usuários por cidade. A lista abaixo mostra as cidades com maior presença.</p>
+        <ol id="city-list" class="city-list"></ol>
+      </article>
+
+      <article class="panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Chancela da ação</p>
+            <h2>Centro Europeu no projeto</h2>
+          </div>
+        </div>
+        <div class="partner-card">
+          <img src="assets/brand/logo-centro-europeu.webp" alt="Centro Europeu">
+          <div>
+            <span>Exposição da marca</span>
+            <strong id="centro-views">—</strong>
+          </div>
+          <div>
+            <span>Cliques no site</span>
+            <strong id="centro-clicks">—</strong>
+          </div>
+        </div>
+        <p class="panel-copy">Acompanha a visibilidade do apoio de capacitação e quantas pessoas demonstraram interesse em conhecer o Centro Europeu.</p>
+      </article>
+    </section>
+
+    <section class="panel table-panel">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">Desempenho por participante</p>
+          <h2>Como os menus estão performando</h2>
+        </div>
+        <span class="panel-note">menu, Instagram e rota</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Restaurante</th>
+              <th>Prato consultado</th>
+              <th>Instagram</th>
+              <th>Rotas</th>
+              <th>Índice</th>
+            </tr>
+          </thead>
+          <tbody id="restaurant-table"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="dashboard-grid bottom-grid">
+      <article class="panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Ações do público</p>
+            <h2>Cliques que indicam intenção</h2>
+          </div>
+        </div>
+        <div id="event-bars" class="event-bars"></div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Para o empresário</p>
+            <h2>Leitura prática dos resultados</h2>
+          </div>
+        </div>
+        <ul id="insights-list" class="insights-list"></ul>
+      </article>
+    </section>
+  </main>
+
+  <script src="supabase-config.js?v=20260627-live-data" defer></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
+  <script src="dashboard.js?v=20260627-live-data" defer></script>
 </body>
 </html>
