@@ -70,7 +70,7 @@ const demoData = {
     { name: "Villa Bistrô", dish: "Parmegiana de Mignon e Torta de Pistache", views: 4, instagram: 1, maps: 1 }
   ],
   events: [
-    { label: "Pratos consultados", value: 127 },
+    { label: "Menus dos pratos consultados", value: 127 },
     { label: "Cliques para Instagram", value: 37 },
     { label: "Buscas de rota", value: 41 },
     { label: "Cliques no Centro Europeu", value: 4 },
@@ -201,7 +201,7 @@ async function loadLiveData(period = "7d") {
     cache: "no-store"
   });
 
-  if (!response.ok) throw new Error("Supabase indisponível");
+  if (!response.ok) throw new Error("Fonte de dados indisponível");
   return await response.json();
 }
 
@@ -247,7 +247,7 @@ function renderKpis(data) {
   setText("centro-clicks", number(data.centroEuropeu.clicks));
   setText(
     "centro-copy",
-    `${number(data.centroEuropeu.sectionViews)} pessoas já viram a presença institucional do Centro Europeu no site do festival. Essa exposição reforça a chancela de capacitação, excelência e desenvolvimento da gastronomia local.`
+    `${number(data.centroEuropeu.sectionViews)} pessoas já visualizaram a presença do Centro Europeu dentro do festival. Essa exposição aproxima a marca de formação profissional, excelência gastronômica e desenvolvimento do turismo em Curitiba.`
   );
 }
 
@@ -312,7 +312,7 @@ function renderCities(data) {
   document.getElementById("city-list").innerHTML = cities.slice(0, 6).map((city) => `
     <li>
       <strong>${displayCity(city.city)}</strong>
-      <span>${number(city.users)} ${city.users === 1 ? "usuário" : "usuários"}</span>
+      <span>${number(city.users)} ${city.users === 1 ? "pessoa" : "pessoas"}</span>
     </li>
   `).join("");
 
@@ -359,7 +359,7 @@ function renderCities(data) {
     });
 
     L.marker([lat, lng], { icon })
-      .bindPopup(`<strong>${displayCity(city.city)}</strong><br>${number(city.users)} ${city.users === 1 ? "usuário" : "usuários"}`)
+      .bindPopup(`<strong>${displayCity(city.city)}</strong><br>${number(city.users)} ${city.users === 1 ? "pessoa" : "pessoas"}`)
       .addTo(cityLayer);
 
     bounds.push([lat, lng]);
@@ -388,6 +388,12 @@ function topRestaurants(data) {
   return [...(data.restaurants || [])].sort((a, b) => restaurantScore(b) - restaurantScore(a));
 }
 
+function restaurantRank(item) {
+  const ranked = topRestaurants(dashboardData || {});
+  const index = ranked.findIndex((restaurant) => restaurant.name === item.name);
+  return index >= 0 ? index + 1 : ranked.length;
+}
+
 function renderRestaurantSpotlight(item) {
   const card = document.getElementById("restaurant-spotlight");
 
@@ -398,25 +404,28 @@ function renderRestaurantSpotlight(item) {
 
   const maxScore = Math.max(...(dashboardData?.restaurants || []).map(restaurantScore), 1);
   const score = Math.round((restaurantScore(item) / maxScore) * 100);
+  const rank = restaurantRank(item);
+  const rankText = rank === 1 ? "Destaque atual de interesse do público" : `${rank}º no ranking de interesse do público`;
 
   card.innerHTML = `
+    <p class="spotlight-tag">${rankText}</p>
     <h3>${item.name}</h3>
     <p class="dish">${item.dish || "Menu participante"}</p>
     <div class="spotlight-kpis">
       <div>
-        <span>Menu aberto</span>
+        <span>Menu consultado</span>
         <strong>${number(item.views)}</strong>
       </div>
       <div>
-        <span>Instagram</span>
+        <span>Cliques Instagram</span>
         <strong>${number(item.instagram)}</strong>
       </div>
       <div>
-        <span>Rotas</span>
+        <span>Buscas no mapa</span>
         <strong>${number(item.maps)}</strong>
       </div>
       <div>
-        <span>Índice</span>
+        <span>Interesse</span>
         <strong>${number(score)}</strong>
       </div>
     </div>`;
@@ -441,7 +450,7 @@ function renderRestaurantSelector(data) {
 
   const restaurants = restaurantsAlphabetical(data);
   select.innerHTML = `
-    <option value="">Selecione para ver os números</option>
+    <option value="">Selecione um participante</option>
     ${restaurants.map((item) => `<option value="${item.name}">${restaurantLabel(item)}</option>`).join("")}
   `;
 
@@ -458,18 +467,19 @@ function renderRestaurantSelector(data) {
 
 function renderRestaurants(data) {
   const table = document.getElementById("restaurant-table");
-  const restaurants = restaurantsAlphabetical(data);
+  const restaurants = topRestaurants(data);
   const maxScore = Math.max(...restaurants.map(restaurantScore), 1);
 
-  table.innerHTML = restaurants.map((item) => {
+  table.innerHTML = restaurants.map((item, index) => {
     const score = Math.round((restaurantScore(item) / maxScore) * 100);
     return `
       <tr data-restaurant="${item.name}" tabindex="0" aria-label="Ver detalhes de ${item.name}">
+        <td data-label="Posição"><span class="rank-badge ${index === 0 ? "is-leader" : ""}">${index + 1}º</span></td>
         <td data-label="Restaurante">${item.name}</td>
-        <td data-label="Prato consultado"><span class="restaurant-name">${number(item.views)}<small>${item.dish || "Menu participante"}</small></span></td>
+        <td data-label="Menu consultado"><span class="restaurant-name">${number(item.views)}<small>${item.dish || "Menu participante"}</small></span></td>
         <td data-label="Instagram">${number(item.instagram)}</td>
-        <td data-label="Rotas">${number(item.maps)}</td>
-        <td data-label="Índice"><span class="interest-pill">${score}</span></td>
+        <td data-label="Mapa">${number(item.maps)}</td>
+        <td data-label="Interesse"><span class="interest-pill">${score}</span></td>
       </tr>`;
   }).join("");
 
@@ -493,10 +503,33 @@ function renderEvents(data) {
     const width = Math.max(4, (event.value / max) * 100);
     return `
       <div class="event-row">
-        <header><span>${event.label}</span><strong>${number(event.value)}</strong></header>
+        <header><span>${friendlyEventLabel(event.label)}</span><strong>${number(event.value)}</strong></header>
         <div class="event-track"><div class="event-fill" style="width:${width}%"></div></div>
       </div>`;
   }).join("");
+}
+
+function friendlyEventLabel(label = "") {
+  const normalized = label.toLowerCase();
+  const labels = {
+    page_view: "Acessos ao site",
+    restaurant_view: "Menus dos pratos consultados",
+    section_view: "Áreas do site visualizadas",
+    user_engagement: "Pessoas engajadas",
+    session_start: "Visitas iniciadas",
+    first_visit: "Novos visitantes",
+    vote_click: "Cliques para votar",
+    instagram_click: "Cliques no Instagram",
+    maps_click: "Buscas no mapa",
+    centro_click: "Cliques no Centro Europeu",
+    external_click: "Cliques externos"
+  };
+  if (labels[normalized]) return labels[normalized];
+  if (normalized.includes("pratos")) return "Menus dos pratos consultados";
+  if (normalized.includes("centro")) return "Cliques no Centro Europeu";
+  if (normalized.includes("instagram")) return "Cliques no Instagram";
+  if (normalized.includes("rota") || normalized.includes("mapa")) return "Buscas no mapa";
+  return label || "Ação do público";
 }
 
 function renderInsights(data) {
@@ -507,9 +540,9 @@ function renderInsights(data) {
   const cityNames = cities.slice(0, 6).map((item) => displayCity(item.city)).join(", ");
 
   const insights = [
-    cities.length ? `A ação já despertou interesse em ${number(cities.length)} cidades. Entre as origens aparecem ${cityNames}, mostrando alcance para além do público local.` : "O alcance por cidade começa a aparecer conforme o público acessa o site.",
-    topRestaurant ? `${topRestaurant.name} aparece como destaque de interesse neste momento, combinando consultas ao prato, Instagram e rotas.` : "O destaque de interesse será exibido conforme os menus receberem acessos.",
-    `A marca do Centro Europeu já foi vista ${number(centroViews)} vezes no ambiente do festival, com ${number(centroClicks)} cliques para conhecer mais sobre a instituição.`,
+    cities.length ? `O festival já despertou interesse em ${number(cities.length)} cidades. Entre as origens aparecem ${cityNames}, um sinal importante de alcance turístico e boca a boca regional.` : "O alcance por cidade começa a aparecer conforme o público acessa o site.",
+    topRestaurant ? `${topRestaurant.name} lidera o interesse do público neste momento, reunindo consultas ao menu, cliques no Instagram e buscas de rota.` : "O destaque de interesse será exibido conforme os menus receberem acessos.",
+    `A presença do Centro Europeu já foi vista ${number(centroViews)} vezes no site, com ${number(centroClicks)} cliques de pessoas interessadas em conhecer mais sobre a instituição.`,
     (data.totals.voteClicks || 0) === 0
       ? "A votação ainda está em fase de espera; a partir de 1º de julho, esse indicador passa a mostrar intenção direta de participação do público."
       : "Os cliques na votação já funcionam como principal indicador de conversão da ação."
@@ -520,9 +553,9 @@ function renderInsights(data) {
 
 function renderMeta(data) {
   const labels = {
-    ga4: "Dados do Google Analytics · GA4",
-    live: "Coleta nova do site · Supabase",
-    demo: "Prévia do painel · dados demonstrativos"
+    ga4: "Indicadores atualizados",
+    live: "Movimento do site",
+    demo: "Prévia do painel"
   };
   setText("source-label", labels[data.source] || labels.demo);
   setText("updated-at", data.updatedAt ? dateFormatter.format(new Date(data.updatedAt)) : "sem atualização");

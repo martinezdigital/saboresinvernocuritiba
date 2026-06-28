@@ -16,9 +16,9 @@
   <main class="dashboard-shell">
     <header class="dashboard-hero">
       <div>
-        <p class="eyebrow">Painel dos restaurantes</p>
-        <h1>Relatório simples do Festival Sabores do Inverno</h1>
-        <p class="hero-copy">Uma leitura direta para os restaurantes participantes acompanharem o interesse do público: acessos aos menus, cliques para Instagram, rotas no mapa, alcance por cidade e visibilidade dos parceiros da ação.</p>
+        <p class="eyebrow">Painel dos participantes</p>
+        <h1>Painel de desempenho do Festival Sabores do Inverno</h1>
+        <p class="hero-copy">Uma visão clara para acompanhar o interesse do público, entender quais menus estão sendo mais procurados e estimular a divulgação dos restaurantes durante a ação.</p>
       </div>
       <div class="hero-status">
         <span id="source-label">Carregando dados…</span>
@@ -28,21 +28,21 @@
 
     <section class="report-note" aria-label="Período do relatório">
       <div>
-        <p class="eyebrow">Período considerado</p>
+        <p class="eyebrow">Leitura acumulada</p>
         <strong>Todo o período do festival</strong>
-        <span>Os indicadores principais sempre mostram o acumulado da ação. O gráfico de movimento permite comparar 7 dias, 30 dias e todo o período.</span>
+        <span>Os números principais mostram o resultado acumulado da ação. No gráfico de movimento, também é possível observar os últimos 7 e 30 dias.</span>
       </div>
-      <a href="#meu-restaurante">Encontrar meu restaurante</a>
+      <a href="#meu-restaurante">Ver meu restaurante</a>
     </section>
 
     <section class="live-panel" aria-label="Resumo em tempo real">
       <div class="live-heading">
         <div>
           <p class="eyebrow">Agora no site</p>
-          <h2>Resumo em tempo real</h2>
+          <h2>O que acontece agora</h2>
         </div>
         <div class="live-users">
-          <span>Usuários ativos</span>
+          <span>Pessoas no site</span>
           <strong id="realtime-users">—</strong>
         </div>
       </div>
@@ -56,14 +56,14 @@
           <ul id="live-actions" class="live-list"></ul>
         </article>
       </div>
-      <p id="realtime-note" class="live-note">Quando conectado à base real, este bloco mostra os acessos ativos e os menus abertos nos últimos minutos.</p>
+      <p id="realtime-note" class="live-note">Este bloco ajuda a enxergar o movimento do público no momento da consulta.</p>
     </section>
 
     <section class="kpi-grid" aria-label="Indicadores principais">
       <article class="kpi-card">
-        <span>Pessoas alcançadas</span>
+        <span>Acessos ao site</span>
         <strong id="kpi-users">—</strong>
-        <small id="kpi-users-note">usuários estimados</small>
+        <small id="kpi-users-note">público acumulado</small>
       </article>
       <article class="kpi-card">
         <span>Interações no site</span>
@@ -71,9 +71,8 @@
         <small>visitas, menus e cliques</small>
       </article>
       <article class="kpi-card">
-        <span>Pratos consultados</span>
+        <span>Menus dos pratos consultados</span>
         <strong id="kpi-restaurant-views">—</strong>
-        <small>aberturas dos menus</small>
       </article>
       <article class="kpi-card kpi-accent">
         <span>Cliques para votar</span>
@@ -86,17 +85,17 @@
       <div class="panel-heading">
         <div>
           <p class="eyebrow">Consulta rápida</p>
-          <h2>Encontre seu restaurante</h2>
+          <h2>Veja o desempenho do seu restaurante</h2>
         </div>
-        <span class="panel-note">dados do período total</span>
+        <span class="panel-note">período total</span>
       </div>
       <div class="finder-grid">
         <div class="finder-control">
-          <label for="restaurant-select">Escolha o restaurante</label>
+          <label for="restaurant-select">Escolha um participante</label>
           <select id="restaurant-select">
-            <option value="">Selecione para ver os números</option>
+            <option value="">Selecione um participante</option>
           </select>
-          <p>Clique no seu restaurante para ver, sem complicação, quantas pessoas abriram o menu e quantas demonstraram intenção pelo Instagram ou pelo mapa.</p>
+          <p>Selecione o restaurante para ver o interesse gerado pelo menu, os cliques para Instagram e as buscas de rota no mapa.</p>
         </div>
         <div id="restaurant-spotlight" class="restaurant-spotlight" aria-live="polite">
           <span class="empty-state">Selecione um restaurante para destacar os dados.</span>
@@ -134,7 +133,7 @@
             <span>Os pontos serão exibidos por cidade.</span>
           </div>
         </div>
-        <p class="map-caption">O mapa mostra de onde vêm as pessoas que buscaram informações sobre o festival. É uma forma simples de enxergar o alcance turístico e regional da ação.</p>
+        <p class="map-caption">O mapa mostra de onde vêm as pessoas interessadas no festival. Quanto mais cidades aparecem, maior o alcance regional e turístico da ação.</p>
         <ol id="city-list" class="city-list"></ol>
       </article>
 
@@ -148,7 +147,7 @@
         <div class="partner-card">
           <img src="assets/brand/logo-centro-europeu.webp" alt="Centro Europeu">
           <div>
-            <span>Exposição da marca</span>
+            <span>Pessoas impactadas</span>
             <strong id="centro-views">—</strong>
           </div>
           <div>
@@ -156,41 +155,42 @@
             <strong id="centro-clicks">—</strong>
           </div>
         </div>
-        <p id="centro-copy" class="panel-copy">A chancela do Centro Europeu reforça o posicionamento de capacitação, excelência e desenvolvimento da gastronomia local.</p>
+        <p id="centro-copy" class="panel-copy">A presença do Centro Europeu associa o festival à formação profissional, à excelência gastronômica e ao desenvolvimento do turismo em Curitiba.</p>
       </article>
     </section>
 
     <section class="panel table-panel">
       <div class="panel-heading">
         <div>
-          <p class="eyebrow">Desempenho por participante</p>
-          <h2>Como os menus estão performando</h2>
+          <p class="eyebrow">Ranking de interesse</p>
+          <h2>Restaurantes com maior procura do público</h2>
         </div>
         <span class="panel-note">clique em uma linha para destacar</span>
       </div>
       <section class="metric-legend" aria-label="Como ler a tabela">
         <article>
           <span>Menu consultado</span>
-          <p>Mostra quantas vezes o público abriu a página do prato participante.</p>
+          <p>Mostra quantas vezes o público abriu o prato participante no site.</p>
         </article>
         <article>
           <span>Instagram e rotas</span>
-          <p>Indicam intenção de conhecer melhor o restaurante ou planejar a visita.</p>
+          <p>Indicam intenção de conhecer melhor o restaurante ou planejar uma visita.</p>
         </article>
         <article>
-          <span>Índice de interesse</span>
-          <p>Resume os sinais em uma pontuação simples para facilitar a leitura.</p>
+          <span>Ranking de interesse</span>
+          <p>Combina consultas ao menu, Instagram e rotas. É um termômetro de divulgação, não uma avaliação oficial.</p>
         </article>
       </section>
       <div class="table-wrap">
         <table>
           <thead>
             <tr>
+              <th>Posição</th>
               <th>Restaurante</th>
-              <th>Prato consultado</th>
+              <th>Menu consultado</th>
               <th>Instagram</th>
-              <th>Rotas</th>
-              <th>Índice</th>
+              <th>Mapa</th>
+              <th>Interesse</th>
             </tr>
           </thead>
           <tbody id="restaurant-table"></tbody>
@@ -212,8 +212,8 @@
       <article class="panel">
         <div class="panel-heading">
           <div>
-            <p class="eyebrow">Para o empresário</p>
-            <h2>Leitura prática dos resultados</h2>
+            <p class="eyebrow">Leitura prática</p>
+            <h2>O que os números mostram</h2>
           </div>
         </div>
         <ul id="insights-list" class="insights-list"></ul>
@@ -224,6 +224,6 @@
   <script src="ga-config.js?v=20260628-owner-report" defer></script>
   <script src="supabase-config.js?v=20260627-live-data" defer></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
-  <script src="dashboard.js?v=20260628-owner-report" defer></script>
+  <script src="dashboard.js?v=20260628-owner-copy-ranking" defer></script>
 </body>
 </html>

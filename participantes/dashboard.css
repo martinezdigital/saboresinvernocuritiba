@@ -397,6 +397,20 @@ select {
   font-size: clamp(1.35rem, 3vw, 2.2rem);
 }
 
+.spotlight-tag {
+  display: inline-flex;
+  margin: 0 0 12px;
+  padding: 8px 11px;
+  color: #ffd3a0;
+  background: rgba(255, 255, 255, .1);
+  border: 1px solid rgba(255, 255, 255, .16);
+  border-radius: 999px;
+  font-size: .68rem;
+  font-weight: 900;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
 .restaurant-spotlight .dish {
   margin: 8px 0 18px;
   color: rgba(255, 255, 255, .76);
@@ -905,6 +919,23 @@ tbody tr:last-child td {
   font-weight: 900;
 }
 
+.rank-badge {
+  display: inline-flex;
+  min-width: 48px;
+  justify-content: center;
+  padding: 8px 11px;
+  color: var(--navy);
+  background: rgba(16, 26, 69, .08);
+  border-radius: 999px;
+  font-weight: 900;
+}
+
+.rank-badge.is-leader {
+  color: white;
+  background: linear-gradient(135deg, var(--orange), #ff9b4a);
+  box-shadow: 0 10px 24px rgba(242, 106, 0, .18);
+}
+
 .restaurant-name {
   display: grid;
   gap: 4px;
@@ -1101,13 +1132,14 @@ tbody tr:last-child td {
     text-transform: uppercase;
   }
 
-  td:first-child {
+  td:nth-child(2) {
     display: block;
     color: var(--navy);
     font-size: 1.05rem;
+    font-weight: 900;
   }
 
-  td:first-child::before {
+  td:nth-child(2)::before {
     display: block;
     margin-bottom: 5px;
   }
