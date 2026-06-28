@@ -280,19 +280,13 @@ function formatDecimal(value) {
   }).format(Number(value || 0));
 }
 
-function renderEngagement(data) {
-  const card = document.getElementById("engagement-card");
-  if (!card) return;
+function renderFooterNote(data) {
+  const note = document.getElementById("footer-engagement-note");
+  if (!note) return;
 
   const seconds = Number(data?.totals?.averageEngagementSeconds || 0);
   if (seconds) {
-    card.hidden = false;
-    setText("engagement-title", "Permanência no site");
-    setText("engagement-duration", formatDuration(seconds));
-    setText(
-      "engagement-copy",
-      "Tempo médio de navegação. Quando esse número está alto, indica que o público está explorando os menus e comparando as receitas do festival."
-    );
+    note.textContent = `Permanência média: ${formatDuration(seconds)}`;
     return;
   }
 
@@ -300,18 +294,9 @@ function renderEngagement(data) {
   const pageviews = Number(data?.totals?.pageviews || 0);
   const pagesPerVisitor = users ? pageviews / users : 0;
 
-  if (!pagesPerVisitor) {
-    card.hidden = true;
-    return;
-  }
-
-  card.hidden = false;
-  setText("engagement-title", "Navegação média");
-  setText("engagement-duration", `${formatDecimal(pagesPerVisitor)} páginas`);
-  setText(
-    "engagement-copy",
-    "Média de páginas vistas por visitante. É um bom sinal quando o público abre mais de uma página e navega entre os menus participantes."
-  );
+  note.textContent = pagesPerVisitor
+    ? `Navegação média: ${formatDecimal(pagesPerVisitor)} páginas por visitante`
+    : "";
 }
 
 function renderRealtime(data) {
@@ -623,18 +608,6 @@ function renderInsights(data) {
     topRestaurant ? `${topRestaurant.name} lidera o interesse do público neste momento, reunindo consultas ao menu, cliques no Instagram e buscas de rota.` : "O destaque de interesse será exibido conforme os menus receberem acessos."
   ];
 
-  const averageEngagement = Number(data?.totals?.averageEngagementSeconds || 0);
-  if (averageEngagement) {
-    insights.splice(1, 0, `O tempo médio de permanência está em ${formatDuration(averageEngagement)}, um bom sinal de que as pessoas estão navegando entre os menus do festival.`);
-  } else {
-    const users = Number(data?.totals?.users || 0);
-    const pageviews = Number(data?.totals?.pageviews || 0);
-    const pagesPerVisitor = users ? pageviews / users : 0;
-    if (pagesPerVisitor) {
-      insights.splice(1, 0, `Cada visitante visualiza, em média, ${formatDecimal(pagesPerVisitor)} páginas, um bom sinal de navegação entre os menus do festival.`);
-    }
-  }
-
   if (isVotingOpen()) {
     insights.push(`A votação popular já registrou ${number(data.totals.voteClicks)} cliques no formulário oficial.`);
   }
@@ -656,7 +629,7 @@ function renderDashboard(data) {
   renderMeta(data);
   renderRealtime(data);
   renderKpis(data);
-  renderEngagement(data);
+  renderFooterNote(data);
   renderTimeline(data);
   setTimelineButtons(timelinePeriod);
   renderCities(data);

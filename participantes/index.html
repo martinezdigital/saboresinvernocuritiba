@@ -68,7 +68,7 @@
       <article class="kpi-card">
         <span>Acessos ao site</span>
         <strong id="kpi-pageviews">—</strong>
-        <small>visualizações de páginas</small>
+        <small>movimento acumulado</small>
       </article>
       <article class="kpi-card">
         <span>Menus pesquisados</span>
@@ -79,14 +79,6 @@
         <strong id="kpi-votes">—</strong>
         <small id="kpi-votes-note">dados após abertura</small>
       </article>
-    </section>
-
-    <section id="engagement-card" class="engagement-card" aria-label="Tempo médio de permanência" hidden>
-      <div>
-        <p id="engagement-title" class="eyebrow">Permanência no site</p>
-        <strong id="engagement-duration">—</strong>
-      </div>
-      <p id="engagement-copy">Tempo médio de navegação. Quando esse número está alto, indica que o público está explorando os menus e comparando as receitas do festival.</p>
     </section>
 
     <section id="meu-restaurante" class="panel restaurant-finder" aria-label="Consulta por restaurante">
@@ -227,11 +219,16 @@
         <ul id="insights-list" class="insights-list"></ul>
       </article>
     </section>
+
+    <footer class="dashboard-footer">
+      <span id="footer-engagement-note"></span>
+      <strong>Desenvolvido por PartiuCuritiba.</strong>
+    </footer>
   </main>
 
   <script src="ga-config.js?v=20260628-owner-report" defer></script>
   <script src="supabase-config.js?v=20260627-live-data" defer></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
-  <script src="dashboard.js?v=20260628-engagement-center" defer></script>
+  <script src="dashboard.js?v=20260628-footer-partiu" defer></script>
 </body>
 </html>
