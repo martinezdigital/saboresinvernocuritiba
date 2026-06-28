@@ -17,8 +17,8 @@
     <header class="dashboard-hero">
       <div>
         <p class="eyebrow">Painel dos participantes</p>
-        <h1>Painel de desempenho do Festival Sabores do Inverno</h1>
-        <p class="hero-copy">Uma visão clara para acompanhar o interesse do público, entender quais menus estão sendo mais procurados e estimular a divulgação dos restaurantes durante a ação.</p>
+        <h1>1º Festival Sabores do Inverno Curitiba</h1>
+        <p class="hero-copy">Acompanhe o interesse do público e descubra quais menus estão sendo mais pesquisados no festival.</p>
       </div>
       <div class="hero-status">
         <span id="source-label">Carregando dados…</span>
@@ -30,7 +30,7 @@
       <div>
         <p class="eyebrow">Leitura acumulada</p>
         <strong>Todo o período do festival</strong>
-        <span>Os números principais mostram o resultado acumulado da ação. No gráfico de movimento, também é possível observar os últimos 7 e 30 dias.</span>
+        <span>Atualização automática dos principais sinais de interesse do público.</span>
       </div>
       <a href="#meu-restaurante">Ver meu restaurante</a>
     </section>
@@ -48,11 +48,11 @@
       </div>
       <div class="live-grid">
         <article>
-          <h3>Menus sendo visitados</h3>
+          <h3>Receitas sendo vistas agora</h3>
           <ul id="live-restaurants" class="live-list"></ul>
         </article>
         <article>
-          <h3>Últimas ações importantes</h3>
+          <h3>Movimento recente</h3>
           <ul id="live-actions" class="live-list"></ul>
         </article>
       </div>
@@ -61,23 +61,23 @@
 
     <section class="kpi-grid" aria-label="Indicadores principais">
       <article class="kpi-card">
-        <span>Acessos ao site</span>
+        <span>Visitantes únicos</span>
         <strong id="kpi-users">—</strong>
-        <small id="kpi-users-note">público acumulado</small>
+        <small id="kpi-users-note">pessoas diferentes estimadas</small>
       </article>
       <article class="kpi-card">
-        <span>Interações no site</span>
+        <span>Acessos ao site</span>
         <strong id="kpi-pageviews">—</strong>
-        <small>visitas, menus e cliques</small>
+        <small>visualizações de páginas</small>
       </article>
       <article class="kpi-card">
-        <span>Menus dos pratos consultados</span>
+        <span>Menus pesquisados</span>
         <strong id="kpi-restaurant-views">—</strong>
       </article>
-      <article class="kpi-card kpi-accent">
-        <span>Cliques para votar</span>
+      <article id="vote-card" class="kpi-card kpi-accent">
+        <span id="kpi-votes-label">Votação popular</span>
         <strong id="kpi-votes">—</strong>
-        <small>quando a votação abrir</small>
+        <small id="kpi-votes-note">dados após abertura</small>
       </article>
     </section>
 
@@ -224,6 +224,6 @@
   <script src="ga-config.js?v=20260628-owner-report" defer></script>
   <script src="supabase-config.js?v=20260627-live-data" defer></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
-  <script src="dashboard.js?v=20260628-owner-copy-ranking" defer></script>
+  <script src="dashboard.js?v=20260628-coherent-copy-vote" defer></script>
 </body>
 </html>

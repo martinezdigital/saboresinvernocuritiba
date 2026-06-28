@@ -70,10 +70,10 @@
     { "name": "Villa Bistrô", "dish": "Parmegiana de Mignon e Torta de Pistache", "views": 4, "instagram": 1, "maps": 1 }
   ],
   "events": [
-    { "label": "Menus dos pratos consultados", "value": 127 },
+    { "label": "Menus pesquisados", "value": 127 },
     { "label": "Cliques para Instagram", "value": 37 },
     { "label": "Buscas de rota", "value": 41 },
     { "label": "Cliques no Centro Europeu", "value": 4 },
-    { "label": "Cliques para votar", "value": 0 }
+    { "label": "Cliques na votação", "value": 0 }
   ]
 }

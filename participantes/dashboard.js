@@ -70,11 +70,11 @@ const demoData = {
     { name: "Villa Bistrô", dish: "Parmegiana de Mignon e Torta de Pistache", views: 4, instagram: 1, maps: 1 }
   ],
   events: [
-    { label: "Menus dos pratos consultados", value: 127 },
+    { label: "Menus pesquisados", value: 127 },
     { label: "Cliques para Instagram", value: 37 },
     { label: "Buscas de rota", value: 41 },
     { label: "Cliques no Centro Europeu", value: 4 },
-    { label: "Cliques para votar", value: 0 }
+    { label: "Cliques na votação", value: 0 }
   ]
 };
 
@@ -238,11 +238,23 @@ function setText(id, value) {
   if (element) element.textContent = value;
 }
 
+function isVotingOpen() {
+  return Date.now() >= new Date("2026-07-01T00:00:00-03:00").getTime();
+}
+
 function renderKpis(data) {
   setText("kpi-users", number(data.totals.users));
   setText("kpi-pageviews", number(data.totals.pageviews));
   setText("kpi-restaurant-views", number(data.totals.restaurantViews));
-  setText("kpi-votes", number(data.totals.voteClicks));
+  if (isVotingOpen()) {
+    setText("kpi-votes-label", "Cliques na votação");
+    setText("kpi-votes", number(data.totals.voteClicks));
+    setText("kpi-votes-note", "formulário oficial");
+  } else {
+    setText("kpi-votes-label", "Votação popular");
+    setText("kpi-votes", "1º/7");
+    setText("kpi-votes-note", "dados após abertura");
+  }
   setText("centro-views", number(data.centroEuropeu.sectionViews));
   setText("centro-clicks", number(data.centroEuropeu.clicks));
   setText(
@@ -263,24 +275,34 @@ function renderRealtime(data) {
       <li>
         <span>
           <strong>${item.name}</strong>
-          <small>${item.dish || "Menu participante"} · ${item.when || "agora"}</small>
+          <small>${item.dish || "Receita participante"} · ${item.when || "agora"}</small>
         </span>
         <span class="live-badge">${number(item.visitors || 1)}</span>
       </li>
     `).join("")
-    : `<li><span><strong>Nenhum menu ativo agora</strong><small>Aguardando novos acessos.</small></span></li>`;
+    : `<li><span><strong>Nenhuma receita aberta agora</strong><small>Aguardando novos acessos.</small></span></li>`;
 
   document.getElementById("live-actions").innerHTML = actions.length
     ? actions.map((item) => `
       <li>
         <span>
-          <strong>${item.label}</strong>
+          <strong>${friendlyRealtimeLabel(item.label)}</strong>
           <small>${item.restaurant || "Site do festival"}</small>
         </span>
         <span class="live-badge">${item.when || "agora"}</span>
       </li>
     `).join("")
-    : `<li><span><strong>Sem ações recentes</strong><small>Quando houver cliques, eles aparecem aqui.</small></span></li>`;
+    : `<li><span><strong>Sem movimento recente</strong><small>Visitas e cliques aparecem aqui conforme o público navega.</small></span></li>`;
+}
+
+function friendlyRealtimeLabel(label = "") {
+  const normalized = label.toLowerCase();
+  if (normalized.includes("menu") || normalized.includes("receita")) return "Receita sendo vista";
+  if (normalized.includes("instagram")) return "Clique no Instagram";
+  if (normalized.includes("rota") || normalized.includes("mapa")) return "Clique para ver rota no mapa";
+  if (normalized.includes("centro")) return "Visita ao site do Centro Europeu";
+  if (normalized.includes("vota")) return "Clique na votação";
+  return label || "Movimento no site";
 }
 
 function renderTimeline(data) {
@@ -497,7 +519,11 @@ function renderRestaurants(data) {
 }
 
 function renderEvents(data) {
-  const events = data.events || [];
+  const events = (data.events || []).filter((event) => {
+    if (isVotingOpen()) return true;
+    const label = String(event.label || "").toLowerCase();
+    return !label.includes("votar") && !label.includes("vota") && !label.includes("vote");
+  });
   const max = Math.max(...events.map((event) => event.value), 1);
   document.getElementById("event-bars").innerHTML = events.map((event) => {
     const width = Math.max(4, (event.value / max) * 100);
@@ -513,19 +539,19 @@ function friendlyEventLabel(label = "") {
   const normalized = label.toLowerCase();
   const labels = {
     page_view: "Acessos ao site",
-    restaurant_view: "Menus dos pratos consultados",
+    restaurant_view: "Menus pesquisados",
     section_view: "Áreas do site visualizadas",
     user_engagement: "Pessoas engajadas",
     session_start: "Visitas iniciadas",
     first_visit: "Novos visitantes",
-    vote_click: "Cliques para votar",
+    vote_click: "Cliques na votação",
     instagram_click: "Cliques no Instagram",
     maps_click: "Buscas no mapa",
     centro_click: "Cliques no Centro Europeu",
     external_click: "Cliques externos"
   };
   if (labels[normalized]) return labels[normalized];
-  if (normalized.includes("pratos")) return "Menus dos pratos consultados";
+  if (normalized.includes("pratos") || normalized.includes("menus")) return "Menus pesquisados";
   if (normalized.includes("centro")) return "Cliques no Centro Europeu";
   if (normalized.includes("instagram")) return "Cliques no Instagram";
   if (normalized.includes("rota") || normalized.includes("mapa")) return "Buscas no mapa";
@@ -542,11 +568,12 @@ function renderInsights(data) {
   const insights = [
     cities.length ? `O festival já despertou interesse em ${number(cities.length)} cidades. Entre as origens aparecem ${cityNames}, um sinal importante de alcance turístico e boca a boca regional.` : "O alcance por cidade começa a aparecer conforme o público acessa o site.",
     topRestaurant ? `${topRestaurant.name} lidera o interesse do público neste momento, reunindo consultas ao menu, cliques no Instagram e buscas de rota.` : "O destaque de interesse será exibido conforme os menus receberem acessos.",
-    `A presença do Centro Europeu já foi vista ${number(centroViews)} vezes no site, com ${number(centroClicks)} cliques de pessoas interessadas em conhecer mais sobre a instituição.`,
-    (data.totals.voteClicks || 0) === 0
-      ? "A votação ainda está em fase de espera; a partir de 1º de julho, esse indicador passa a mostrar intenção direta de participação do público."
-      : "Os cliques na votação já funcionam como principal indicador de conversão da ação."
+    `A presença do Centro Europeu já foi vista ${number(centroViews)} vezes no site, com ${number(centroClicks)} cliques de pessoas interessadas em conhecer mais sobre a instituição.`
   ];
+
+  if (isVotingOpen()) {
+    insights.push(`A votação popular já registrou ${number(data.totals.voteClicks)} cliques no formulário oficial.`);
+  }
 
   document.getElementById("insights-list").innerHTML = insights.map((text) => `<li>${text}</li>`).join("");
 }
