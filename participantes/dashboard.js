@@ -89,12 +89,84 @@ let cityLayer;
 let dashboardData;
 let refreshTimer;
 
+const cityCoordinateFallback = {
+  curitiba: [-25.4284, -49.2733],
+  "sao paulo": [-23.5505, -46.6333],
+  "são paulo": [-23.5505, -46.6333],
+  "sao jose dos pinhais": [-25.5313, -49.2031],
+  "são josé dos pinhais": [-25.5313, -49.2031],
+  colombo: [-25.2925, -49.2242],
+  "porto alegre": [-30.0346, -51.2177],
+  "rio de janeiro": [-22.9068, -43.1729],
+  guarapuava: [-25.3902, -51.4623],
+  guarulhos: [-23.4545, -46.5333],
+  itabira: [-19.6239, -43.2312],
+  itabuna: [-14.7856, -39.2804],
+  lages: [-27.8150, -50.3264],
+  paranagua: [-25.5205, -48.5095],
+  "paranaguá": [-25.5205, -48.5095],
+  "ponta grossa": [-25.0994, -50.1583],
+  "rio negro": [-26.1059, -49.7973],
+  "vila velha": [-20.3478, -40.2949]
+};
+
+function cityCoordinates(city) {
+  const key = String(city || "")
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+  return cityCoordinateFallback[key] || null;
+}
+
 function supabaseConfig() {
   const config = window.SABORES_SUPABASE || {};
   const url = String(config.url || "").replace(/\/$/, "");
   const anonKey = String(config.anonKey || "");
   if (!url || !anonKey) return null;
   return { url, anonKey };
+}
+
+function googleAnalyticsConfig() {
+  const config = window.SABORES_GA_PROXY || {};
+  const url = String(config.url || "");
+  if (!url) return null;
+  return { url };
+}
+
+function loadJsonp(url, params = {}) {
+  return new Promise((resolve, reject) => {
+    const callbackName = `saboresGaCallback_${Date.now()}_${Math.random().toString(16).slice(2)}`;
+    const script = document.createElement("script");
+    const finalUrl = new URL(url);
+
+    Object.entries(params).forEach(([key, value]) => finalUrl.searchParams.set(key, value));
+    finalUrl.searchParams.set("callback", callbackName);
+
+    const cleanup = () => {
+      delete window[callbackName];
+      script.remove();
+    };
+
+    window[callbackName] = (data) => {
+      cleanup();
+      resolve(data);
+    };
+
+    script.onerror = () => {
+      cleanup();
+      reject(new Error("Não foi possível carregar os dados do Google Analytics"));
+    };
+
+    script.src = finalUrl.toString();
+    document.head.appendChild(script);
+  });
+}
+
+async function loadGoogleAnalyticsData(period = "7d") {
+  const config = googleAnalyticsConfig();
+  if (!config) return null;
+  return await loadJsonp(config.url, { period_key: period, cache: String(Date.now()) });
 }
 
 async function loadLiveData(period = "7d") {
@@ -117,6 +189,13 @@ async function loadLiveData(period = "7d") {
 }
 
 async function loadData(period = "7d") {
+  try {
+    const gaData = await loadGoogleAnalyticsData(period);
+    if (gaData) return gaData;
+  } catch (error) {
+    console.warn("Google Analytics indisponível:", error);
+  }
+
   try {
     const liveData = await loadLiveData(period);
     if (liveData) return liveData;
@@ -240,7 +319,10 @@ function renderCities(data) {
 
   const bounds = [];
   cities.forEach((city) => {
-    if (typeof city.lat !== "number" || typeof city.lng !== "number") return;
+    const fallback = cityCoordinates(city.city);
+    const lat = typeof city.lat === "number" ? city.lat : fallback?.[0];
+    const lng = typeof city.lng === "number" ? city.lng : fallback?.[1];
+    if (typeof lat !== "number" || typeof lng !== "number") return;
     const size = 26 + (city.users / max) * 32;
     const icon = L.divIcon({
       className: "",
@@ -249,11 +331,11 @@ function renderCities(data) {
       iconAnchor: [size / 2, size / 2]
     });
 
-    L.marker([city.lat, city.lng], { icon })
+    L.marker([lat, lng], { icon })
       .bindPopup(`<strong>${city.city}</strong><br>${number(city.users)} ${city.users === 1 ? "usuário" : "usuários"}`)
       .addTo(cityLayer);
 
-    bounds.push([city.lat, city.lng]);
+    bounds.push([lat, lng]);
   });
 
   if (bounds.length > 1) {
@@ -322,8 +404,12 @@ function renderInsights(data) {
 }
 
 function renderMeta(data) {
-  const isDemo = data.source !== "live";
-  setText("source-label", isDemo ? "Prévia do painel · dados demonstrativos" : "Dados reais conectados");
+  const labels = {
+    ga4: "Dados do Google Analytics · GA4",
+    live: "Coleta nova do site · Supabase",
+    demo: "Prévia do painel · dados demonstrativos"
+  };
+  setText("source-label", labels[data.source] || labels.demo);
   setText("updated-at", data.updatedAt ? dateFormatter.format(new Date(data.updatedAt)) : "sem atualização");
 }
 
