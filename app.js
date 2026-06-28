@@ -381,9 +381,99 @@ const normalizeText = (value = "") => String(value)
   .toLowerCase()
   .trim();
 
+const analyticsStorage = {
+  session: "sabores_session_id",
+  visitor: "sabores_visitor_id"
+};
+
+function randomAnalyticsId(prefix) {
+  if (window.crypto?.randomUUID) return `${prefix}_${window.crypto.randomUUID()}`;
+  return `${prefix}_${Date.now()}_${Math.random().toString(16).slice(2)}`;
+}
+
+function getStoredAnalyticsId(key, prefix) {
+  try {
+    const existing = window.localStorage.getItem(key);
+    if (existing) return existing;
+    const created = randomAnalyticsId(prefix);
+    window.localStorage.setItem(key, created);
+    return created;
+  } catch {
+    return randomAnalyticsId(prefix);
+  }
+}
+
+const analyticsSessionId = getStoredAnalyticsId(analyticsStorage.session, "sess");
+const analyticsVisitorId = getStoredAnalyticsId(analyticsStorage.visitor, "visitor");
+
+function supabaseAnalyticsConfig() {
+  const config = window.SABORES_SUPABASE || {};
+  const url = String(config.url || "").replace(/\/$/, "");
+  const anonKey = String(config.anonKey || "");
+  if (!url || !anonKey) return null;
+  return { url, anonKey };
+}
+
+function cleanAnalyticsObject(object = {}) {
+  return Object.fromEntries(
+    Object.entries(object).filter(([, value]) => value !== undefined && value !== null && value !== "")
+  );
+}
+
+function deviceLabel() {
+  const width = window.innerWidth || document.documentElement.clientWidth || 0;
+  if (width <= 780) return "mobile";
+  if (width <= 1100) return "tablet";
+  return "desktop";
+}
+
+function trackSupabaseEvent(eventName, parameters = {}) {
+  const config = supabaseAnalyticsConfig();
+  if (!config || !eventName) return;
+
+  const payload = cleanAnalyticsObject({
+    event_name: eventName,
+    page_path: parameters.page_path || window.location.pathname,
+    page_title: parameters.page_title || document.title,
+    restaurant_slug: parameters.restaurant_slug,
+    restaurant_name: parameters.restaurant_name,
+    dish_name: parameters.dish_name,
+    link_area: parameters.link_area,
+    partner_name: parameters.partner_name,
+    section_name: parameters.section_name,
+    address: parameters.address,
+    session_id: analyticsSessionId,
+    visitor_id: analyticsVisitorId,
+    device: deviceLabel(),
+    screen_width: window.innerWidth || null,
+    referrer: document.referrer || null,
+    user_agent: navigator.userAgent || null,
+    metadata: cleanAnalyticsObject({
+      link_text: parameters.link_text,
+      link_url: parameters.link_url,
+      price: parameters.price,
+      section_id: parameters.section_id
+    })
+  });
+
+  fetch(`${config.url}/rest/v1/site_events`, {
+    method: "POST",
+    headers: {
+      apikey: config.anonKey,
+      Authorization: `Bearer ${config.anonKey}`,
+      "Content-Type": "application/json",
+      Prefer: "return=minimal"
+    },
+    body: JSON.stringify(payload),
+    keepalive: true
+  }).catch(() => {});
+}
+
 function trackEvent(eventName, parameters = {}) {
-  if (typeof window.gtag !== "function") return;
-  window.gtag("event", eventName, parameters);
+  if (typeof window.gtag === "function") {
+    window.gtag("event", eventName, parameters);
+  }
+  trackSupabaseEvent(eventName, parameters);
 }
 
 function linkLabel(link) {
@@ -411,12 +501,17 @@ function restaurantAnalyticsPayload(restaurant) {
 }
 
 function trackRestaurantPageView(restaurant) {
-  if (typeof window.gtag !== "function") return;
-  window.gtag("event", "page_view", {
+  const payload = {
     page_title: `${restaurant.name} — ${restaurant.dish}`,
     page_location: `${window.location.origin}/restaurantes/${restaurant.slug}`,
-    page_path: `/restaurantes/${restaurant.slug}`
-  });
+    page_path: `/restaurantes/${restaurant.slug}`,
+    ...restaurantAnalyticsPayload(restaurant)
+  };
+
+  if (typeof window.gtag === "function") {
+    window.gtag("event", "page_view", payload);
+  }
+  trackSupabaseEvent("restaurant_page_view", payload);
 }
 
 const locationIcon = `
@@ -823,6 +918,10 @@ function updateHeader() {
 
 window.addEventListener("scroll", updateHeader, { passive: true });
 updateHeader();
+trackSupabaseEvent("page_view", {
+  page_path: window.location.pathname,
+  page_title: document.title
+});
 
 menuToggle.addEventListener("click", () => {
   const open = menuToggle.getAttribute("aria-expanded") === "true";
