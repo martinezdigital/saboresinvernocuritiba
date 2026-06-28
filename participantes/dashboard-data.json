@@ -5,7 +5,8 @@
     "users": 68,
     "pageviews": 492,
     "restaurantViews": 127,
-    "voteClicks": 0
+    "voteClicks": 0,
+    "averageEngagementSeconds": 154
   },
   "centroEuropeu": {
     "sectionViews": 23,

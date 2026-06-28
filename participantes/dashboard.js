@@ -5,7 +5,8 @@ const demoData = {
     users: 68,
     pageviews: 492,
     restaurantViews: 127,
-    voteClicks: 0
+    voteClicks: 0,
+    averageEngagementSeconds: 154
   },
   centroEuropeu: {
     sectionViews: 23,
@@ -252,7 +253,7 @@ function renderKpis(data) {
     setText("kpi-votes-note", "formulário oficial");
   } else {
     setText("kpi-votes-label", "Votação popular");
-    setText("kpi-votes", "1º/7");
+    setText("kpi-votes", "1/7");
     setText("kpi-votes-note", "dados após abertura");
   }
   setText("centro-views", number(data.centroEuropeu.sectionViews));
@@ -260,6 +261,56 @@ function renderKpis(data) {
   setText(
     "centro-copy",
     `${number(data.centroEuropeu.sectionViews)} pessoas já visualizaram a presença do Centro Europeu dentro do festival. Essa exposição aproxima a marca de formação profissional, excelência gastronômica e desenvolvimento do turismo em Curitiba.`
+  );
+}
+
+function formatDuration(secondsValue) {
+  const seconds = Math.round(Number(secondsValue || 0));
+  if (!seconds) return "—";
+  const minutes = Math.floor(seconds / 60);
+  const rest = seconds % 60;
+  if (!minutes) return `${rest}s`;
+  return rest ? `${minutes}min ${rest}s` : `${minutes}min`;
+}
+
+function formatDecimal(value) {
+  return new Intl.NumberFormat("pt-BR", {
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1
+  }).format(Number(value || 0));
+}
+
+function renderEngagement(data) {
+  const card = document.getElementById("engagement-card");
+  if (!card) return;
+
+  const seconds = Number(data?.totals?.averageEngagementSeconds || 0);
+  if (seconds) {
+    card.hidden = false;
+    setText("engagement-title", "Permanência no site");
+    setText("engagement-duration", formatDuration(seconds));
+    setText(
+      "engagement-copy",
+      "Tempo médio de navegação. Quando esse número está alto, indica que o público está explorando os menus e comparando as receitas do festival."
+    );
+    return;
+  }
+
+  const users = Number(data?.totals?.users || 0);
+  const pageviews = Number(data?.totals?.pageviews || 0);
+  const pagesPerVisitor = users ? pageviews / users : 0;
+
+  if (!pagesPerVisitor) {
+    card.hidden = true;
+    return;
+  }
+
+  card.hidden = false;
+  setText("engagement-title", "Navegação média");
+  setText("engagement-duration", `${formatDecimal(pagesPerVisitor)} páginas`);
+  setText(
+    "engagement-copy",
+    "Média de páginas vistas por visitante. É um bom sinal quando o público abre mais de uma página e navega entre os menus participantes."
   );
 }
 
@@ -567,10 +618,22 @@ function renderInsights(data) {
   const cityNames = cities.slice(0, 6).map((item) => displayCity(item.city)).join(", ");
 
   const insights = [
+    `Destaque institucional: a presença do Centro Europeu já foi vista ${number(centroViews)} vezes no site. Além da exposição da marca, houve ${number(centroClicks)} cliques para conhecer mais sobre a instituição.`,
     cities.length ? `O festival já despertou interesse em ${number(cities.length)} cidades. Entre as origens aparecem ${cityNames}, um sinal importante de alcance turístico e boca a boca regional.` : "O alcance por cidade começa a aparecer conforme o público acessa o site.",
-    topRestaurant ? `${topRestaurant.name} lidera o interesse do público neste momento, reunindo consultas ao menu, cliques no Instagram e buscas de rota.` : "O destaque de interesse será exibido conforme os menus receberem acessos.",
-    `A presença do Centro Europeu já foi vista ${number(centroViews)} vezes no site, com ${number(centroClicks)} cliques de pessoas interessadas em conhecer mais sobre a instituição.`
+    topRestaurant ? `${topRestaurant.name} lidera o interesse do público neste momento, reunindo consultas ao menu, cliques no Instagram e buscas de rota.` : "O destaque de interesse será exibido conforme os menus receberem acessos."
   ];
+
+  const averageEngagement = Number(data?.totals?.averageEngagementSeconds || 0);
+  if (averageEngagement) {
+    insights.splice(1, 0, `O tempo médio de permanência está em ${formatDuration(averageEngagement)}, um bom sinal de que as pessoas estão navegando entre os menus do festival.`);
+  } else {
+    const users = Number(data?.totals?.users || 0);
+    const pageviews = Number(data?.totals?.pageviews || 0);
+    const pagesPerVisitor = users ? pageviews / users : 0;
+    if (pagesPerVisitor) {
+      insights.splice(1, 0, `Cada visitante visualiza, em média, ${formatDecimal(pagesPerVisitor)} páginas, um bom sinal de navegação entre os menus do festival.`);
+    }
+  }
 
   if (isVotingOpen()) {
     insights.push(`A votação popular já registrou ${number(data.totals.voteClicks)} cliques no formulário oficial.`);
@@ -593,6 +656,7 @@ function renderDashboard(data) {
   renderMeta(data);
   renderRealtime(data);
   renderKpis(data);
+  renderEngagement(data);
   renderTimeline(data);
   setTimelineButtons(timelinePeriod);
   renderCities(data);
