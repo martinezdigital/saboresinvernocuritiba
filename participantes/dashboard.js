@@ -71,7 +71,7 @@ const demoData = {
     { name: "Villa Bistrô", dish: "Parmegiana de Mignon e Torta de Pistache", views: 4, instagram: 1, maps: 1 }
   ],
   events: [
-    { label: "Menus pesquisados", value: 127 },
+    { label: "Menus consultados", value: 127 },
     { label: "Cliques para Instagram", value: 37 },
     { label: "Buscas de rota", value: 41 },
     { label: "Cliques no Centro Europeu", value: 4 },
@@ -574,8 +574,8 @@ function renderEvents(data) {
 function friendlyEventLabel(label = "") {
   const normalized = label.toLowerCase();
   const labels = {
-    page_view: "Acessos ao site",
-    restaurant_view: "Menus pesquisados",
+    page_view: "Páginas vistas",
+    restaurant_view: "Menus consultados",
     section_view: "Áreas do site visualizadas",
     user_engagement: "Pessoas engajadas",
     session_start: "Visitas iniciadas",
@@ -587,7 +587,7 @@ function friendlyEventLabel(label = "") {
     external_click: "Cliques externos"
   };
   if (labels[normalized]) return labels[normalized];
-  if (normalized.includes("pratos") || normalized.includes("menus")) return "Menus pesquisados";
+  if (normalized.includes("pratos") || normalized.includes("menus")) return "Menus consultados";
   if (normalized.includes("centro")) return "Cliques no Centro Europeu";
   if (normalized.includes("instagram")) return "Cliques no Instagram";
   if (normalized.includes("rota") || normalized.includes("mapa")) return "Buscas no mapa";
