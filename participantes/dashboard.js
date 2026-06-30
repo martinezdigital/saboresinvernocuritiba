@@ -89,10 +89,11 @@ let cityMap;
 let cityLayer;
 let dashboardData;
 let refreshTimer;
-let timelinePeriod = "all";
+let timelinePeriod = "7d";
 let selectedRestaurantName = "";
 
 const MAIN_PERIOD = "all";
+const TIMELINE_START_TIME = Date.UTC(2026, 5, 27);
 
 const cityCoordinateFallback = {
   curitiba: [-25.4284, -49.2733],
@@ -341,9 +342,53 @@ function friendlyRealtimeLabel(label = "") {
   return label || "Movimento no site";
 }
 
+function parseTimelineTime(item) {
+  const rawDate = String(item.date || item.rawDate || "").trim();
+  if (/^\d{8}$/.test(rawDate)) {
+    return Date.UTC(Number(rawDate.slice(0, 4)), Number(rawDate.slice(4, 6)) - 1, Number(rawDate.slice(6, 8)));
+  }
+
+  if (/^\d{4}-\d{2}-\d{2}$/.test(rawDate)) {
+    const [year, month, day] = rawDate.split("-").map(Number);
+    return Date.UTC(year, month - 1, day);
+  }
+
+  const label = String(item.label || "").trim();
+  const match = label.match(/^(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?$/);
+  if (!match) return null;
+
+  const day = Number(match[1]);
+  const month = Number(match[2]);
+  let year = match[3] ? Number(match[3]) : 2026;
+  if (year < 100) year += 2000;
+  return Date.UTC(year, month - 1, day);
+}
+
+function timelineItems(data) {
+  return [...(data.timeline || [])]
+    .filter((item) => Number(item.value || 0) > 0)
+    .filter((item) => {
+      const time = parseTimelineTime(item);
+      return time === null || time >= TIMELINE_START_TIME;
+    })
+    .sort((a, b) => {
+      const timeA = parseTimelineTime(a);
+      const timeB = parseTimelineTime(b);
+      if (timeA === null || timeB === null) return 0;
+      return timeA - timeB;
+    });
+}
+
 function renderTimeline(data) {
   const chart = document.getElementById("timeline-chart");
-  const items = data.timeline || [];
+  const items = timelineItems(data);
+
+  if (!items.length) {
+    chart.style.setProperty("--bars", 1);
+    chart.innerHTML = `<div style="grid-column:1/-1;align-self:center;color:var(--muted);font-weight:800;text-align:center;">O movimento do público será exibido a partir de 27/06.</div>`;
+    return;
+  }
+
   const max = Math.max(...items.map((item) => item.value), 1);
   chart.style.setProperty("--bars", items.length);
   chart.innerHTML = items.map((item) => {
@@ -630,7 +675,7 @@ function renderDashboard(data) {
   renderRealtime(data);
   renderKpis(data);
   renderFooterNote(data);
-  renderTimeline(data);
+  if (timelinePeriod === MAIN_PERIOD) renderTimeline(data);
   setTimelineButtons(timelinePeriod);
   renderCities(data);
   renderRestaurantSelector(data);
@@ -643,7 +688,7 @@ async function refreshDashboard() {
   dashboardData = await loadData(MAIN_PERIOD);
   renderDashboard(dashboardData);
   if (timelinePeriod !== MAIN_PERIOD) {
-    refreshTimeline(timelinePeriod);
+    await refreshTimeline(timelinePeriod);
   }
 }
 
