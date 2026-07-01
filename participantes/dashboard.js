@@ -81,7 +81,6 @@ const demoData = {
     { label: "Cliques para Instagram", value: 37 },
     { label: "Buscas de rota", value: 41 },
     { label: "Cliques no site Centro Europeu", value: 4 },
-    { label: "QR no estabelecimento", value: 0 },
     { label: "Cliques na votação", value: 0 }
   ]
 };
@@ -683,19 +682,19 @@ function friendlyEventLabel(label = "") {
     centro_click: "Cliques no site Centro Europeu",
     centro_europeu_view: "Vistas da marca Centro Europeu",
     centro_europeu_click: "Cliques no site Centro Europeu",
-    qr_pdv_visit: "QR no estabelecimento",
-    campaign_visit: "Acessos pela internet",
+    qr_pdv_visit: "QR do material de PDV",
+    campaign_visit: "Demais acessos ao site",
     external_click: "Cliques externos"
   };
   if (labels[normalized]) return labels[normalized];
   if (normalized.includes("pratos") || normalized.includes("menus")) return "Menus consultados";
-  if (normalized.includes("qr")) return "QR no estabelecimento";
+  if (normalized.includes("qr")) return "QR do material de PDV";
   if (normalized.includes("centro") && normalized.includes("vista")) return "Vistas da marca Centro Europeu";
   if (normalized.includes("centro")) return "Cliques no site Centro Europeu";
   if (normalized.includes("instagram")) return "Cliques no Instagram";
   if (normalized.includes("rota") || normalized.includes("mapa")) return "Buscas no mapa";
   if (normalized.includes("vota")) return "Cliques na votação";
-  if (normalized.includes("internet")) return "Acessos pela internet";
+  if (normalized.includes("internet") || normalized.includes("demais acessos")) return "Demais acessos ao site";
   return label || "Ação do público";
 }
 
@@ -708,7 +707,7 @@ function renderTrafficSources(data) {
   if (!note) return;
 
   note.textContent = traffic.pdvQr
-    ? `${number(traffic.pdvQr)} ${traffic.pdvQr === 1 ? "acesso veio" : "acessos vieram"} do QR marcado no material de PDV.`
+    ? `${number(traffic.pdvQr)} ${traffic.pdvQr === 1 ? "acesso foi identificado" : "acessos foram identificados"} pela tag do QR do material de PDV.`
     : "A separação começa a aparecer conforme o público acessa pelo QR atualizado do material de PDV.";
 }
 
