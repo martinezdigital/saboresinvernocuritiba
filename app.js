@@ -406,6 +406,21 @@ function getStoredAnalyticsId(key, prefix) {
 const analyticsSessionId = getStoredAnalyticsId(analyticsStorage.session, "sess");
 const analyticsVisitorId = getStoredAnalyticsId(analyticsStorage.visitor, "visitor");
 
+function campaignParams() {
+  const params = new URLSearchParams(window.location.search);
+  return cleanAnalyticsObject({
+    utm_source: params.get("utm_source"),
+    utm_medium: params.get("utm_medium"),
+    utm_campaign: params.get("utm_campaign"),
+    utm_content: params.get("utm_content"),
+    utm_term: params.get("utm_term")
+  });
+}
+
+function isPdvQrCampaign(campaign = {}) {
+  return campaign.utm_source === "pdv" && campaign.utm_medium === "qr_code";
+}
+
 function supabaseAnalyticsConfig() {
   const config = window.SABORES_SUPABASE || {};
   const url = String(config.url || "").replace(/\/$/, "");
@@ -452,7 +467,12 @@ function trackSupabaseEvent(eventName, parameters = {}) {
       link_text: parameters.link_text,
       link_url: parameters.link_url,
       price: parameters.price,
-      section_id: parameters.section_id
+      section_id: parameters.section_id,
+      campaign_source: parameters.campaign_source,
+      campaign_medium: parameters.campaign_medium,
+      campaign_name: parameters.campaign_name,
+      campaign_content: parameters.campaign_content,
+      campaign_term: parameters.campaign_term
     })
   });
 
@@ -474,6 +494,29 @@ function trackEvent(eventName, parameters = {}) {
     window.gtag("event", eventName, parameters);
   }
   trackSupabaseEvent(eventName, parameters);
+}
+
+function trackCampaignEntry() {
+  const campaign = campaignParams();
+  if (!Object.keys(campaign).length) return;
+
+  const eventName = isPdvQrCampaign(campaign) ? "qr_pdv_visit" : "campaign_visit";
+  const sessionKey = `sabores_${eventName}_${JSON.stringify(campaign)}`;
+
+  try {
+    if (window.sessionStorage.getItem(sessionKey)) return;
+    window.sessionStorage.setItem(sessionKey, "1");
+  } catch {}
+
+  trackEvent(eventName, {
+    page_path: window.location.pathname,
+    page_title: document.title,
+    campaign_source: campaign.utm_source,
+    campaign_medium: campaign.utm_medium,
+    campaign_name: campaign.utm_campaign,
+    campaign_content: campaign.utm_content,
+    campaign_term: campaign.utm_term
+  });
 }
 
 function linkLabel(link) {
@@ -922,6 +965,7 @@ trackSupabaseEvent("page_view", {
   page_path: window.location.pathname,
   page_title: document.title
 });
+trackCampaignEntry();
 
 menuToggle.addEventListener("click", () => {
   const open = menuToggle.getAttribute("aria-expanded") === "true";
