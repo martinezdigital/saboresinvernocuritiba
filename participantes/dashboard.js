@@ -12,6 +12,11 @@ const demoData = {
     sectionViews: 23,
     clicks: 4
   },
+  trafficSources: {
+    pdvQr: 0,
+    digital: 68,
+    total: 68
+  },
   realtime: {
     activeUsers: 4,
     activeRestaurants: [
@@ -72,9 +77,11 @@ const demoData = {
   ],
   events: [
     { label: "Menus consultados", value: 127 },
+    { label: "Vistas da marca Centro Europeu", value: 23 },
     { label: "Cliques para Instagram", value: 37 },
     { label: "Buscas de rota", value: 41 },
-    { label: "Cliques no Centro Europeu", value: 4 },
+    { label: "Cliques no site Centro Europeu", value: 4 },
+    { label: "QR no estabelecimento", value: 0 },
     { label: "Cliques na votação", value: 0 }
   ]
 };
@@ -238,6 +245,38 @@ function number(value) {
 function setText(id, value) {
   const element = document.getElementById(id);
   if (element) element.textContent = value;
+}
+
+function numericMetric(value) {
+  if (typeof value === "number") return value;
+  if (typeof value === "string") return Number(value || 0);
+  if (value && typeof value === "object") {
+    return Number(value.value ?? value.sessions ?? value.users ?? value.count ?? 0);
+  }
+  return 0;
+}
+
+function eventValue(data, labels = []) {
+  const events = data?.events || [];
+  const wanted = labels.map((label) => String(label).toLowerCase());
+  const found = events.find((event) => {
+    const normalized = String(event.label || "").toLowerCase();
+    return wanted.some((label) => normalized.includes(label));
+  });
+  return numericMetric(found?.value);
+}
+
+function trafficSummary(data) {
+  const source = data?.trafficSources || {};
+  const pdvQr = numericMetric(source.pdvQr ?? source.qrPdv ?? source.qrCode)
+    || eventValue(data, ["qr_pdv_visit", "qr no estabelecimento", "qr code", "material de pdv"]);
+  const total = numericMetric(source.total ?? source.totalEntrances ?? source.sessions)
+    || numericMetric(data?.totals?.sessions)
+    || numericMetric(data?.totals?.users);
+  const digital = numericMetric(source.digital ?? source.internet ?? source.online)
+    || Math.max(total - pdvQr, 0);
+
+  return { pdvQr, digital, total };
 }
 
 function isVotingOpen() {
@@ -600,17 +639,30 @@ function renderRestaurants(data) {
 }
 
 function renderEvents(data) {
-  const events = (data.events || []).filter((event) => {
+  let events = [...(data.events || [])];
+  const centroViews = numericMetric(data?.centroEuropeu?.sectionViews);
+  const hasCentroViews = events.some((event) => {
+    const label = String(event.label || "").toLowerCase();
+    return label.includes("vista") && label.includes("centro");
+  });
+
+  if (centroViews && !hasCentroViews) {
+    events.push({ label: "Vistas da marca Centro Europeu", value: centroViews });
+  }
+
+  events = events.filter((event) => {
     if (isVotingOpen()) return true;
     const label = String(event.label || "").toLowerCase();
     return !label.includes("votar") && !label.includes("vota") && !label.includes("vote");
-  });
-  const max = Math.max(...events.map((event) => event.value), 1);
+  }).sort((a, b) => numericMetric(b.value) - numericMetric(a.value));
+
+  const max = Math.max(...events.map((event) => numericMetric(event.value)), 1);
   document.getElementById("event-bars").innerHTML = events.map((event) => {
-    const width = Math.max(4, (event.value / max) * 100);
+    const value = numericMetric(event.value);
+    const width = Math.max(4, (value / max) * 100);
     return `
       <div class="event-row">
-        <header><span>${friendlyEventLabel(event.label)}</span><strong>${number(event.value)}</strong></header>
+        <header><span>${friendlyEventLabel(event.label)}</span><strong>${number(value)}</strong></header>
         <div class="event-track"><div class="event-fill" style="width:${width}%"></div></div>
       </div>`;
   }).join("");
@@ -628,16 +680,36 @@ function friendlyEventLabel(label = "") {
     vote_click: "Cliques na votação",
     instagram_click: "Cliques no Instagram",
     maps_click: "Buscas no mapa",
-    centro_click: "Cliques no Centro Europeu",
+    centro_click: "Cliques no site Centro Europeu",
+    centro_europeu_view: "Vistas da marca Centro Europeu",
+    centro_europeu_click: "Cliques no site Centro Europeu",
+    qr_pdv_visit: "QR no estabelecimento",
+    campaign_visit: "Acessos pela internet",
     external_click: "Cliques externos"
   };
   if (labels[normalized]) return labels[normalized];
   if (normalized.includes("pratos") || normalized.includes("menus")) return "Menus consultados";
-  if (normalized.includes("centro")) return "Cliques no Centro Europeu";
+  if (normalized.includes("qr")) return "QR no estabelecimento";
+  if (normalized.includes("centro") && normalized.includes("vista")) return "Vistas da marca Centro Europeu";
+  if (normalized.includes("centro")) return "Cliques no site Centro Europeu";
   if (normalized.includes("instagram")) return "Cliques no Instagram";
   if (normalized.includes("rota") || normalized.includes("mapa")) return "Buscas no mapa";
   if (normalized.includes("vota")) return "Cliques na votação";
+  if (normalized.includes("internet")) return "Acessos pela internet";
   return label || "Ação do público";
+}
+
+function renderTrafficSources(data) {
+  const traffic = trafficSummary(data);
+  setText("traffic-pdv-qr", number(traffic.pdvQr));
+  setText("traffic-digital", number(traffic.digital));
+
+  const note = document.getElementById("traffic-note");
+  if (!note) return;
+
+  note.textContent = traffic.pdvQr
+    ? `${number(traffic.pdvQr)} ${traffic.pdvQr === 1 ? "acesso veio" : "acessos vieram"} do QR marcado no material de PDV.`
+    : "A separação começa a aparecer conforme o público acessa pelo QR atualizado do material de PDV.";
 }
 
 function renderInsights(data) {
@@ -654,7 +726,11 @@ function renderInsights(data) {
   ];
 
   if (isVotingOpen()) {
-    insights.push(`A votação popular já registrou ${number(data.totals.voteClicks)} cliques no formulário oficial.`);
+    const voteClicks = numericMetric(data?.totals?.voteClicks);
+    insights.push(voteClicks === 1
+      ? "1 pessoa já clicou em votar e foi direcionada para o formulário oficial."
+      : `${number(voteClicks)} pessoas já clicaram em votar e foram direcionadas para o formulário oficial.`
+    );
   }
 
   document.getElementById("insights-list").innerHTML = insights.map((text) => `<li>${text}</li>`).join("");
@@ -681,6 +757,7 @@ function renderDashboard(data) {
   renderRestaurantSelector(data);
   renderRestaurants(data);
   renderEvents(data);
+  renderTrafficSources(data);
   renderInsights(data);
 }
 

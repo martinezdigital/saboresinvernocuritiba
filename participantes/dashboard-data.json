@@ -12,6 +12,11 @@
     "sectionViews": 23,
     "clicks": 4
   },
+  "trafficSources": {
+    "pdvQr": 0,
+    "digital": 68,
+    "total": 68
+  },
   "realtime": {
     "activeUsers": 4,
     "activeRestaurants": [
@@ -72,9 +77,11 @@
   ],
   "events": [
     { "label": "Menus consultados", "value": 127 },
+    { "label": "Vistas da marca Centro Europeu", "value": 23 },
     { "label": "Cliques para Instagram", "value": 37 },
     { "label": "Buscas de rota", "value": 41 },
-    { "label": "Cliques no Centro Europeu", "value": 4 },
+    { "label": "Cliques no site Centro Europeu", "value": 4 },
+    { "label": "QR no estabelecimento", "value": 0 },
     { "label": "Cliques na votação", "value": 0 }
   ]
 }

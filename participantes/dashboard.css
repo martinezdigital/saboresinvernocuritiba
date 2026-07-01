@@ -1070,6 +1070,49 @@ tbody tr:last-child td {
   overflow-wrap: anywhere;
 }
 
+.traffic-panel {
+  display: grid;
+  gap: 18px;
+}
+
+.traffic-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.traffic-card {
+  padding: 20px;
+  border: 1px solid rgba(16, 26, 69, .09);
+  border-radius: 24px;
+  background: linear-gradient(135deg, #fffdf8, #f4f8fb);
+}
+
+.traffic-card span {
+  display: block;
+  color: var(--muted);
+  font-size: .78rem;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.traffic-card strong {
+  display: block;
+  margin-top: 8px;
+  color: var(--navy);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  line-height: .95;
+}
+
+.traffic-card p,
+.traffic-note {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: .92rem;
+  line-height: 1.5;
+}
+
 .dashboard-footer {
   display: flex;
   min-width: 0;
@@ -1101,6 +1144,10 @@ tbody tr:last-child td {
   .dashboard-grid,
   .bottom-grid,
   .finder-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .traffic-grid {
     grid-template-columns: 1fr;
   }
 

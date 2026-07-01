@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&family=Libre+Baskerville:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIINfQATv3Qlc8QGeF4S2hR2AT6X4pXhZ4M=" crossorigin="">
-  <link rel="stylesheet" href="dashboard.css?v=20260628-responsive">
+  <link rel="stylesheet" href="dashboard.css?v=20260701-traffic-source">
 </head>
 <body>
   <main class="dashboard-shell">
@@ -147,7 +147,7 @@
         <div class="partner-card">
           <img src="assets/brand/logo-centro-europeu.webp" alt="Centro Europeu">
           <div>
-            <span>Pessoas impactadas</span>
+            <span>Vistas da marca</span>
             <strong id="centro-views">—</strong>
           </div>
           <div>
@@ -203,7 +203,7 @@
         <div class="panel-heading">
           <div>
             <p class="eyebrow">Ações do público</p>
-            <h2>Cliques que indicam intenção</h2>
+            <h2>Acessos que indicam interesse</h2>
           </div>
         </div>
         <div id="event-bars" class="event-bars"></div>
@@ -220,6 +220,29 @@
       </article>
     </section>
 
+    <section class="panel traffic-panel">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">Origem dos acessos</p>
+          <h2>QR no restaurante x internet</h2>
+        </div>
+        <span class="panel-note">curiosidade do material de PDV</span>
+      </div>
+      <div class="traffic-grid">
+        <article class="traffic-card">
+          <span>QR no estabelecimento</span>
+          <strong id="traffic-pdv-qr">—</strong>
+          <p>Acessos identificados pelo QR do material no restaurante.</p>
+        </article>
+        <article class="traffic-card">
+          <span>Acessos pela internet</span>
+          <strong id="traffic-digital">—</strong>
+          <p>Demais acessos ao site, sem a tag do QR de PDV.</p>
+        </article>
+      </div>
+      <p id="traffic-note" class="traffic-note">A leitura começa a separar os acessos a partir do QR atualizado com a tag do material de PDV.</p>
+    </section>
+
     <footer class="dashboard-footer">
       <span id="footer-engagement-note"></span>
       <strong>Desenvolvido por PartiuCuritiba.</strong>
@@ -229,6 +252,6 @@
   <script src="ga-config.js?v=20260628-owner-report" defer></script>
   <script src="supabase-config.js?v=20260627-live-data" defer></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
-  <script src="dashboard.js?v=20260630-timeline" defer></script>
+  <script src="dashboard.js?v=20260701-traffic-source" defer></script>
 </body>
 </html>
