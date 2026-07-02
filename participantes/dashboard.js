@@ -31,13 +31,13 @@ const demoData = {
     ]
   },
   timeline: [
-    { label: "21/06", value: 18 },
-    { label: "22/06", value: 31 },
-    { label: "23/06", value: 42 },
-    { label: "24/06", value: 58 },
-    { label: "25/06", value: 82 },
-    { label: "26/06", value: 119 },
-    { label: "27/06", value: 142 }
+    { label: "21/06", users: 7, value: 18, pageviews: 18 },
+    { label: "22/06", users: 12, value: 31, pageviews: 31 },
+    { label: "23/06", users: 18, value: 42, pageviews: 42 },
+    { label: "24/06", users: 24, value: 58, pageviews: 58 },
+    { label: "25/06", users: 31, value: 82, pageviews: 82 },
+    { label: "26/06", users: 42, value: 119, pageviews: 119 },
+    { label: "27/06", users: 52, value: 142, pageviews: 142 }
   ],
   cities: [
     { city: "Curitiba", users: 42, lat: -25.4284, lng: -49.2733 },
@@ -402,9 +402,22 @@ function parseTimelineTime(item) {
   return Date.UTC(year, month - 1, day);
 }
 
+function timelineMetric(item, keys = []) {
+  for (const key of keys) {
+    const value = Number(item?.[key] || 0);
+    if (value) return value;
+  }
+  return 0;
+}
+
 function timelineItems(data) {
   return [...(data.timeline || [])]
-    .filter((item) => Number(item.value || 0) > 0)
+    .map((item) => ({
+      ...item,
+      users: timelineMetric(item, ["users", "totalUsers", "visitors", "uniqueVisitors"]),
+      pageviews: timelineMetric(item, ["pageviews", "pages", "screenPageViews", "value"])
+    }))
+    .filter((item) => item.users > 0 || item.pageviews > 0)
     .filter((item) => {
       const time = parseTimelineTime(item);
       return time === null || time >= TIMELINE_START_TIME;
@@ -417,27 +430,34 @@ function timelineItems(data) {
     });
 }
 
-function renderTimeline(data) {
-  const chart = document.getElementById("timeline-chart");
-  const items = timelineItems(data);
+function renderTimelineChart(chartId, items, key, emptyText, metricLabel) {
+  const chart = document.getElementById(chartId);
+  if (!chart) return;
 
   if (!items.length) {
     chart.style.setProperty("--bars", 1);
-    chart.innerHTML = `<div style="grid-column:1/-1;align-self:center;color:var(--muted);font-weight:800;text-align:center;">O movimento do público será exibido a partir de 27/06.</div>`;
+    chart.innerHTML = `<div class="timeline-empty">${emptyText}</div>`;
     return;
   }
 
-  const max = Math.max(...items.map((item) => item.value), 1);
+  const max = Math.max(...items.map((item) => item[key]), 1);
   chart.style.setProperty("--bars", items.length);
   chart.innerHTML = items.map((item) => {
-    const height = Math.max(12, (item.value / max) * 92);
-    const value = number(item.value);
+    const rawValue = item[key] || 0;
+    const height = rawValue ? Math.max(12, (rawValue / max) * 92) : 0;
+    const value = number(rawValue);
     return `
-      <div class="timeline-bar" style="height:${height}%" title="${item.label}: ${value} páginas vistas" aria-label="${item.label}: ${value} páginas vistas">
+      <div class="timeline-bar" style="height:${height}%" title="${item.label}: ${value} ${metricLabel}" aria-label="${item.label}: ${value} ${metricLabel}">
         <span>${value}</span>
         <small>${item.label}</small>
       </div>`;
   }).join("");
+}
+
+function renderTimeline(data) {
+  const items = timelineItems(data);
+  renderTimelineChart("timeline-users-chart", items, "users", "Os visitantes por dia serão exibidos a partir de 27/06.", "visitantes únicos");
+  renderTimelineChart("timeline-pages-chart", items, "pageviews", "As páginas vistas por dia serão exibidas a partir de 27/06.", "páginas vistas");
 }
 
 function setTimelineButtons(period) {

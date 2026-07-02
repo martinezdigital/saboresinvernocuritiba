@@ -31,13 +31,13 @@
     ]
   },
   "timeline": [
-    { "label": "21/06", "value": 18 },
-    { "label": "22/06", "value": 31 },
-    { "label": "23/06", "value": 42 },
-    { "label": "24/06", "value": 58 },
-    { "label": "25/06", "value": 82 },
-    { "label": "26/06", "value": 119 },
-    { "label": "27/06", "value": 142 }
+    { "label": "21/06", "users": 7, "value": 18, "pageviews": 18 },
+    { "label": "22/06", "users": 12, "value": 31, "pageviews": 31 },
+    { "label": "23/06", "users": 18, "value": 42, "pageviews": 42 },
+    { "label": "24/06", "users": 24, "value": 58, "pageviews": 58 },
+    { "label": "25/06", "users": 31, "value": 82, "pageviews": 82 },
+    { "label": "26/06", "users": 42, "value": 119, "pageviews": 119 },
+    { "label": "27/06", "users": 52, "value": 142, "pageviews": 142 }
   ],
   "cities": [
     { "city": "Curitiba", "users": 42, "lat": -25.4284, "lng": -49.2733 },

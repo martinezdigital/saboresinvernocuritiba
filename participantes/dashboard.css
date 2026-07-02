@@ -596,7 +596,7 @@ select {
 }
 
 .panel-wide {
-  min-height: 430px;
+  min-height: 0;
 }
 
 .panel-heading {
@@ -607,13 +607,45 @@ select {
   margin-bottom: 22px;
 }
 
+.timeline-duo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.timeline-card {
+  min-width: 0;
+  padding: 16px 14px 12px;
+  background: rgba(16, 26, 69, .035);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+}
+
+.timeline-card header {
+  display: grid;
+  gap: 3px;
+  margin-bottom: 12px;
+}
+
+.timeline-card header span {
+  color: var(--navy);
+  font-size: .88rem;
+  font-weight: 900;
+}
+
+.timeline-card header small {
+  color: var(--muted);
+  font-size: .72rem;
+  font-weight: 800;
+}
+
 .timeline-chart {
   display: grid;
   grid-template-columns: repeat(var(--bars, 7), minmax(58px, 1fr));
   align-items: end;
-  gap: 12px;
-  min-height: 310px;
-  padding: 18px 8px 36px;
+  gap: 9px;
+  min-height: 220px;
+  padding: 22px 4px 32px;
   border-bottom: 1px solid var(--line);
   max-width: 100%;
   overflow-x: auto;
@@ -627,6 +659,14 @@ select {
   min-height: 28px;
   background: linear-gradient(180deg, #058dd7, #103473);
   border-radius: 16px 16px 6px 6px;
+}
+
+.timeline-users .timeline-bar {
+  background: linear-gradient(180deg, #ff8b28, #d85b00);
+}
+
+.timeline-pages .timeline-bar {
+  background: linear-gradient(180deg, #058dd7, #103473);
 }
 
 .timeline-bar span {
@@ -649,8 +689,17 @@ select {
   white-space: nowrap;
 }
 
+.timeline-empty {
+  grid-column: 1 / -1;
+  align-self: center;
+  color: var(--muted);
+  font-weight: 800;
+  line-height: 1.4;
+  text-align: center;
+}
+
 .timeline-caption {
-  margin: 24px 0 0;
+  margin: 14px 0 0;
   color: var(--muted);
   font-size: .86rem;
   font-weight: 700;
@@ -1245,10 +1294,19 @@ tbody tr:last-child td {
     min-height: 0;
   }
 
+  .timeline-duo {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .timeline-card {
+    padding: 14px 12px 10px;
+  }
+
   .timeline-chart {
     grid-template-columns: repeat(var(--bars, 7), minmax(52px, 1fr));
     gap: 6px;
-    min-height: 230px;
+    min-height: 180px;
     padding: 18px 0 34px;
   }
 

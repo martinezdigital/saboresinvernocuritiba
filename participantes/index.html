@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&family=Libre+Baskerville:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIINfQATv3Qlc8QGeF4S2hR2AT6X4pXhZ4M=" crossorigin="">
-  <link rel="stylesheet" href="dashboard.css?v=20260702-timeline-labels">
+  <link rel="stylesheet" href="dashboard.css?v=20260702-dual-timeline">
 </head>
 <body>
   <main class="dashboard-shell">
@@ -109,15 +109,30 @@
         <div class="panel-heading">
           <div>
             <p class="eyebrow">Movimento do público</p>
-            <h2>Páginas vistas ao longo dos dias</h2>
+            <h2>Interesse ao longo dos dias</h2>
           </div>
           <div id="timeline-controls" class="segmented-controls" aria-label="Período do gráfico">
             <button type="button" data-period="7d" class="is-active">7 dias</button>
             <button type="button" data-period="all">Todo período</button>
           </div>
         </div>
-        <div id="timeline-chart" class="timeline-chart" aria-label="Gráfico de páginas vistas por dia"></div>
-        <p class="timeline-caption">Mostra páginas abertas por dia. Uma pessoa pode abrir vários menus, por isso este número é diferente de visitantes únicos.</p>
+        <div class="timeline-duo">
+          <section class="timeline-card" aria-label="Visitantes únicos por dia">
+            <header>
+              <span>Visitantes únicos</span>
+              <small>Pessoas diferentes por dia</small>
+            </header>
+            <div id="timeline-users-chart" class="timeline-chart timeline-users" aria-label="Gráfico de visitantes únicos por dia"></div>
+          </section>
+          <section class="timeline-card" aria-label="Páginas vistas por dia">
+            <header>
+              <span>Páginas vistas</span>
+              <small>Total de páginas abertas</small>
+            </header>
+            <div id="timeline-pages-chart" class="timeline-chart timeline-pages" aria-label="Gráfico de páginas vistas por dia"></div>
+          </section>
+        </div>
+        <p class="timeline-caption">Visitantes únicos mostram pessoas diferentes. Páginas vistas mostram a navegação total — uma mesma pessoa pode abrir vários menus.</p>
       </article>
 
       <article class="panel">
@@ -253,6 +268,6 @@
   <script src="ga-config.js?v=20260628-owner-report" defer></script>
   <script src="supabase-config.js?v=20260627-live-data" defer></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
-  <script src="dashboard.js?v=20260701-traffic-source-2" defer></script>
+  <script src="dashboard.js?v=20260702-dual-timeline" defer></script>
 </body>
 </html>
