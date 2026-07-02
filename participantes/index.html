@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&family=Libre+Baskerville:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIINfQATv3Qlc8QGeF4S2hR2AT6X4pXhZ4M=" crossorigin="">
-  <link rel="stylesheet" href="dashboard.css?v=20260701-traffic-source">
+  <link rel="stylesheet" href="dashboard.css?v=20260702-timeline-labels">
 </head>
 <body>
   <main class="dashboard-shell">
@@ -109,14 +109,15 @@
         <div class="panel-heading">
           <div>
             <p class="eyebrow">Movimento do público</p>
-            <h2>Interesse ao longo dos dias</h2>
+            <h2>Páginas vistas ao longo dos dias</h2>
           </div>
           <div id="timeline-controls" class="segmented-controls" aria-label="Período do gráfico">
             <button type="button" data-period="7d" class="is-active">7 dias</button>
             <button type="button" data-period="all">Todo período</button>
           </div>
         </div>
-        <div id="timeline-chart" class="timeline-chart" aria-label="Gráfico de acessos ao longo do tempo"></div>
+        <div id="timeline-chart" class="timeline-chart" aria-label="Gráfico de páginas vistas por dia"></div>
+        <p class="timeline-caption">Mostra páginas abertas por dia. Uma pessoa pode abrir vários menus, por isso este número é diferente de visitantes únicos.</p>
       </article>
 
       <article class="panel">

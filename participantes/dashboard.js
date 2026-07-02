@@ -431,9 +431,10 @@ function renderTimeline(data) {
   chart.style.setProperty("--bars", items.length);
   chart.innerHTML = items.map((item) => {
     const height = Math.max(12, (item.value / max) * 92);
+    const value = number(item.value);
     return `
-      <div class="timeline-bar" style="height:${height}%">
-        <span>${number(item.value)}</span>
+      <div class="timeline-bar" style="height:${height}%" title="${item.label}: ${value} páginas vistas" aria-label="${item.label}: ${value} páginas vistas">
+        <span>${value}</span>
         <small>${item.label}</small>
       </div>`;
   }).join("");

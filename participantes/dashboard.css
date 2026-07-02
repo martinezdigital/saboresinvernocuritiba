@@ -609,18 +609,21 @@ select {
 
 .timeline-chart {
   display: grid;
-  grid-template-columns: repeat(var(--bars, 7), 1fr);
+  grid-template-columns: repeat(var(--bars, 7), minmax(58px, 1fr));
   align-items: end;
   gap: 12px;
   min-height: 310px;
-  padding: 18px 8px 0;
+  padding: 18px 8px 36px;
   border-bottom: 1px solid var(--line);
   max-width: 100%;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: visible;
+  scrollbar-width: thin;
 }
 
 .timeline-bar {
   position: relative;
+  min-width: 58px;
   min-height: 28px;
   background: linear-gradient(180deg, #058dd7, #103473);
   border-radius: 16px 16px 6px 6px;
@@ -644,6 +647,14 @@ select {
   font-size: .72rem;
   font-weight: 800;
   white-space: nowrap;
+}
+
+.timeline-caption {
+  margin: 24px 0 0;
+  color: var(--muted);
+  font-size: .86rem;
+  font-weight: 700;
+  line-height: 1.5;
 }
 
 .city-map {
@@ -1235,22 +1246,24 @@ tbody tr:last-child td {
   }
 
   .timeline-chart {
-    gap: 4px;
+    grid-template-columns: repeat(var(--bars, 7), minmax(52px, 1fr));
+    gap: 6px;
     min-height: 230px;
-    padding-inline: 0;
+    padding: 18px 0 34px;
   }
 
   .timeline-bar {
-    min-width: 0;
+    min-width: 52px;
     border-radius: 12px 12px 5px 5px;
   }
 
   .timeline-bar span {
-    font-size: .72rem;
+    font-size: .68rem;
   }
 
   .timeline-bar small {
-    display: none;
+    display: block;
+    font-size: .62rem;
   }
 
   .city-map,
